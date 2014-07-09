@@ -1,91 +1,51 @@
-<html ng-app="atlasEditor">
+<html>
+    <head>
+        <title>Atlas Editor</title>
 
-<head>
-<title>Atlas Editor</title>
+        <link rel="stylesheet" href="ext/fontawesome/css/font-awesome.css">
+        <link rel="stylesheet" href="ext/fire-editor-ui/common.css">
+        <link rel="stylesheet" href="ext/fire-editor-ui/deep.css">
 
-<link rel="stylesheet" href="ext/fontawesome/css/font-awesome.css">
-<link rel="stylesheet" href="ext/fire-editor-ui/common.css">
-<link rel="stylesheet" href="ext/fire-editor-ui/deep.css">
-<link rel="stylesheet" href="bin/atlas-editor.css">
+        <link rel="import" href="ext/polymer/polymer.html">
+        <link rel="import" href="ext/fire-editor-ui/all.html">
+        <script src="ext/platform/platform.js"></script>
+        <script src="ext/fire-core/core.dev.js"></script>
 
-<link rel="import" href="ext/polymer/polymer.html">
-<link rel="import" href="ext/fire-editor-ui/all.html">
-<script src="ext/platform/platform.js"></script>
-<script src="ext/fire-core/core.dev.js"></script>
-<script src="bin/atlas-editor.js"></script>
-</head>
+        <script src="ext/paper/dist/paper-core.js"></script>
+        <link rel="import" href="bin/all.html">
 
-<body>
+        <style>
+            body {
+                margin: 0px;
+            }
+            * {
+                font-family: Arial;
+                box-sizing: border-box;
 
-<template id="atlas-editor" is="auto-binding">
-    <div id="workspace" class="workspace">
-        <canvas id="canvas" tabindex="1"></canvas>
-    </div>
+                cursor: default;
+                user-select: none;
+                -webkit-user-select: none;
+            }
+            *:focus {
+                outline: 0;
+            }
 
-    <div id="left-sidebar" class="panel left sidebar">
-    </div>
+            body /deep/ * {
+                font-family: Arial;
+                box-sizing: border-box;
 
-    <div tabIndex="1" id="right-sidebar" class="panel right sidebar">
-        <fire-ui-section title="Atlas">
-            <fire-ui-field name="Auto Size" value="{{atlas.autoSize}}"></fire-ui-field>                           
-            <fire-ui-field name="Width" value="{{atlas.width}}" type="enum" enumList="{{editor.sizeList}}"></fire-ui-field>                           
-            <fire-ui-field name="Height" value="{{atlas.height}}" type="enum" enumList="{{editor.sizeList}}"></fire-ui-field>                         
-            <fire-ui-field name="Trim" value="{{atlas.trim}}"></fire-ui-field>                         
-            <fire-ui-field name="Trim Threshold" value="{{atlas.trimThreshold}}" type="int"></fire-ui-field>                         
+                cursor: default;
+                user-select: none;
+                -webkit-user-select: none;
+            }
 
-            <fire-ui-field name="Algorithm" value="{{atlas.algorithm}}" type="enum" enumType="FIRE.Atlas.Algorithm"></fire-ui-field>                         
-            <fire-ui-field name="Sort By" value="{{atlas.sortBy}}" type="enum" enumType="FIRE.Atlas.SortBy"></fire-ui-field>                         
-            <fire-ui-field name="Sort Order" value="{{atlas.sortOrder}}" type="enum" enumType="FIRE.Atlas.SortOrder"></fire-ui-field>                         
-            <fire-ui-field name="Allow Rotate" value="{{atlas.allowRotate}}"></fire-ui-field>                         
+            body /deep/ *:focus {
+                outline: 0;
+            }
+        </style>
+    </head>
 
-            <fire-ui-field name="Contour Bleed" value="{{atlas.useContourBleed}}"></fire-ui-field>                         
-            <fire-ui-field name="Padding Bleed" value="{{atlas.usePaddingBleed}}"></fire-ui-field>                         
-            <fire-ui-field name="Custom Padding" value="{{atlas.customPadding}}" type="int"></fire-ui-field>                         
-            <fire-ui-custom-field name="Build Color">                                      
-                <fire-ui-checkbox value="{{atlas.customBuildColor}}"></fire-ui-checkbox>   
-                <span class="space"></span>                                                
-                <fire-ui-color class="flex-1" value="{{atlas.buildColor}}"></fire-ui-color>
-            </fire-ui-custom-field>                                                        
-        </fire-ui-section>
-
-        <span class="space"></span>                                                                            
-
-        <fire-ui-section title="Canvas">                                                                                         
-            <fire-ui-field name="Smooth Canvas" value="{{canvas.smoothCanvas}}"></fire-ui-field>                                 
-            <fire-ui-field name="Show Checkerboard" value="{{canvas.showCheckerboard}}"></fire-ui-field>                         
-            <fire-ui-field name="Background" value="{{canvas.backgroundColor}}"></fire-ui-field>                                 
-            <fire-ui-field name="Element Background" value="{{canvas.elementBgColor}}"></fire-ui-field>                          
-            <fire-ui-field name="Element Select" value="{{canvas.elementSelectColor}}"></fire-ui-field>                          
-        </fire-ui-section>                                                                                                       
-
-        <span class="space"></span>                                                                            
-
-        <div class="flex-1 flex-row">
-            <div class="flex-1"></div>
-            <fire-ui-button on-click="{{exportAction}}">Export Atlas</fire-ui-button> 
-            <span class="space"></span>
-            <fire-ui-button on-click="{{layoutAction}}">Layout</fire-ui-button>                                                             
-            <span class="space"></span>
-        </div>
-    </div>
-</template>
-
-<script>
-    var atlasEditorEL = document.querySelector('#atlas-editor');
-    var canvasEL = atlasEditorEL.querySelector('#canvas');
-
-    var atlasEditor = new AtlasEditor(canvasEL);
-    atlasEditorEL.editor = atlasEditor;
-    atlasEditorEL.atlas = atlasEditor.atlas;
-    atlasEditorEL.canvas = atlasEditor.freeMoveCanvas;
-    atlasEditorEL.exportAction = function () {
-        atlasEditor.export();
-    };
-    atlasEditorEL.layoutAction = function () {
-        atlasEditor.layout();
-    };
-</script>
-
-</body>
-
+    <body>
+        <atlas-editor></atlas-editor>
+    </body>
 </html>

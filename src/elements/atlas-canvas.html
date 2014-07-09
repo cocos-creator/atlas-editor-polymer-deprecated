@@ -1,0 +1,27 @@
+<polymer-element 
+    name="atlas-canvas" 
+    constructor="AtlasCanvas"
+    attributes="atlas backgroundColor elementBgColor elementSelectColor"
+    on-wheel="wheelAction"
+    on-contextmenu="contextmenuAction"
+    on-dragenter="_dragEnterAction"
+    on-dragover="_dragOverAction"
+    on-dragleave="_dragLeaveAction"
+    on-drop="_dropAction"
+    >
+
+<template>
+<style>
+    :host {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<canvas id="canvas" tabindex="1"></canvas>
+</template>
+
+<script type="text/javascript" src="atlas-canvas.js"></script>
+
+</polymer-element> 

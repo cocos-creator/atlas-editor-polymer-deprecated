@@ -1,6 +1,7 @@
 (function () {
     Polymer('atlas-editor', {
         observe: {
+            'atlas.autoSize': 'atlasLayoutChanged', 
             'atlas.width': 'atlasSizeChanged', 
             'atlas.height': 'atlasSizeChanged', 
 

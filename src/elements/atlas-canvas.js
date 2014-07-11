@@ -654,5 +654,25 @@
             this.checkerboard.visible = showCheckerboard;
             this.project.view.update();
         },
+
+        export: function () {
+            var canvas = document.createElement('canvas');
+            paper.setup(canvas);
+            paper.view.viewSize = [this.atlas.width, this.atlas.height];
+            this.rebuildAtlas(true);
+
+            var ctx = canvas.getContext('2d');
+            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+            //for (var i = 2, pixels = imageData.data, len = pixels.length; i < len; i += 4) {
+            //    pixels[i] = 255;
+            //    pixels[i+1] = 1;
+            //}
+
+            return {
+                canvas: canvas,
+                buffer: imageData.data,
+            };
+        },
     });
 })();

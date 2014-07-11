@@ -124,3 +124,4 @@ gulp.task('watch', function() {
 gulp.task('cp-all', ['cp-core', 'cp-editor-ui', 'cp-img', 'cp-ext', 'cp-html' ] );
 gulp.task('dev', ['cp-all', 'build-html-dev' ] );
 gulp.task('default', ['cp-all', 'build-html' ] );
+gulp.task('all', ['dev'] );

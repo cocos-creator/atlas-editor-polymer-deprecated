@@ -46,23 +46,75 @@
         },
 
         exportAction: function () {
-            // TODO
-            // var canvas = document.createElement('canvas');
-            // paper.setup(canvas);
-            // paper.view.viewSize = [$scope.atlas.width, $scope.atlas.height];
-            // this.atlasCanvas.rebuildAtlas(false);
+            // 测试代码，需要整理
+            window.navigator.saveBlob = window.navigator.saveBlob || window.navigator.msSaveBlob;
+            // export json
+            var json = FIRE.serialize(this.atlas);
+            var blob = new Blob([json], { type: "text/plain;charset=utf-8" });    // not support 'application/json'
+            var name = 'atlas';
+            if (window.navigator.saveBlob) {
+                window.navigator.saveBlob(blob, name + ".json");
+            }
+            else {
+                var jsonDataURL = (window.URL || window.webkitURL).createObjectURL(blob);
+                FIRE.downloadDataUrl(jsonDataURL, name + ".json");
+            }
+            // export png
+            var data = this.atlasCanvas.export();
+            var canvas = data.canvas;
+            var buffer = data.buffer;
+            var pngDataURL, blobBuilderObject;
+            var encodeByCanvas = false;     // encodedByCanvas not contour bleeding
+            if (encodeByCanvas) {
+                canvas.toBlob = canvas.toBlob || canvas.msToBlob;
+                if (canvas.toBlob && window.navigator.saveBlob) {
+                    window.navigator.saveBlob(canvas.toBlob(), name + ".png");
+                }
+                else {
+                    pngDataURL = canvas.toDataURL("image/png");
+                    FIRE.downloadDataUrl(pngDataURL, name + ".png");
+                }
+            }
+            else {
+                console.time('libpng');
 
-            // var ctx = canvas.getContext('2d');
-            // var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            // for (var i = 2, pixels = imageData.data, len = pixels.length; i < len; i += 4) {
-            //     //pixels[i] = 255;
-            //     //pixels[i+1] = 1;
-            // }
+                var png = libpng.createWriter(canvas.width, canvas.height);
+                png.set_filter(libpng.FILTER_NONE);
+                png.set_compression_level(3);
+                png.write_imageData(buffer);
+                png.write_end();
+
+                console.timeEnd('libpng');
+                console.log('Bytes: ' + png.data.length);
+                console.time('encode base64');
+
+                pngDataURL = png.encode_base64();
+
+                console.timeEnd('encode base64');
             
-            // return {
-            //     canvas: canvas,
-            //     buffer: pixels,
-            // };
+                // save png data
+                if (Blob && window.navigator.saveBlob) {
+                    blob = new Blob([new Uint8Array(png.data)], {type: 'image/png'});
+                    window.navigator.saveBlob(blob, name + ".png");
+                }
+                else {
+                    pngDataURL = 'data:image/png;base64,' + pngDataURL;
+                    //pngDataURL = 'i' + pngDataURL;
+                    //var url2 = canvas.toDataURL("image/png");
+                    //url2 = url2.slice('data:image/png;base64,'.length, 1000);
+                    //console.log(pngDataURL.slice(0, 100));
+                    //console.log(pngDataURL.length);
+                    //console.log(pngDataURL.slice(pngDataURL.length - 100));
+                    //console.log(pngDataURL);
+                    //console.log(url2.slice(0, 100));
+                    //console.log(url2.length);
+                    //console.log(url2.slice(url2.length - 100));
+                    //console.log(url2);
+                    //console.log('decode64 pngDataURL ' + decode64(pngDataURL));
+                    //console.log('decode64 url2 ' + decode64(url2));
+                    FIRE.downloadDataUrl(pngDataURL, name + ".png");
+                }
+            }
         },
 
         importAction: function ( event, detail ) {

@@ -542,7 +542,10 @@
         _dropAction: function ( event ) {
             this.border.strokeColor = new paper.Color(0.08, 0.08, 0.08, 1);
             this.project.view.update();
-            this.fire('import', { files: event.dataTransfer.files } );
+            var self = this;
+            FIRE.getDraggingFiles(event, function (files) {
+                self.fire('import', files);
+            });
 
             event.preventDefault();
             event.stopPropagation();
@@ -615,6 +618,7 @@
             this.repaint();
         },
 
+        // if not exporting, just draw atlas to current paper project
         rebuildAtlas: function (forExport) {
             if (!forExport) {
                 this.atlasLayer.removeChildren();
@@ -653,6 +657,30 @@
         showCheckerboard: function ( showCheckerboard ) {
             this.checkerboard.visible = showCheckerboard;
             this.project.view.update();
+        },
+
+        export: function () {
+            var canvas = document.createElement('canvas');
+            paper.setup(canvas);
+            paper.view.viewSize = [this.atlas.width, this.atlas.height];
+            this.rebuildAtlas(true);
+
+            var ctx = canvas.getContext('2d');
+            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            var pixelBuffer = imageData.data;
+
+            //for (var i = 2, len = pixelBuffer.length; i < len; i += 4) {
+            //    if (pixelBuffer[i + 1] === 0) {
+            //        pixelBuffer[i] = 255;
+            //    }
+            //}
+
+            pixelBuffer = Utils.applyBleed(this.atlas, pixelBuffer);   // 这里应该是一个导出前才进行的操作，否则对像素的更改有可能被paper重绘时覆盖
+            
+            return {
+                canvas: canvas,
+                buffer: pixelBuffer,
+            };
         },
     });
 })();

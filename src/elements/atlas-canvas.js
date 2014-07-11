@@ -542,7 +542,10 @@
         _dropAction: function ( event ) {
             this.border.strokeColor = new paper.Color(0.08, 0.08, 0.08, 1);
             this.project.view.update();
-            this.fire('import', { files: event.dataTransfer.files } );
+            var self = this;
+            FIRE.getDraggingFiles(event, function (files) {
+                self.fire('import', files);
+            });
 
             event.preventDefault();
             event.stopPropagation();

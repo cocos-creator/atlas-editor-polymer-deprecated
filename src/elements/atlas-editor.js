@@ -117,18 +117,19 @@
             }
         },
 
-        importAction: function ( event, detail ) {
+        importAction: function ( event, files ) {
             var acceptedTypes = {
                 'image/png': true,
                 'image/jpeg': true,
                 'image/jpg': true,
-                'image/gif': true
+                'image/gif': true,
             };
             var processing = 0;
             var onload = function (event) {
+                var filename = event.target.filename;   // target.filename may be deleted later
                 var imgOnLoad = function () {
                     var texture = new FIRE.SpriteTexture(img);
-                    texture.name = event.target.filename;
+                    texture.name = filename;
 
                     if (this.atlas.trim) {
                         var trimRect = FIRE.getTrimRect(img, this.atlas.trimThreshold);
@@ -155,13 +156,12 @@
             };
 
             var onloadBinded = onload.bind(this);
-            for (var i = 0; i < detail.files.length; ++i) {
-                file = detail.files[i];
+            for (var i = 0; i < files.length; ++i) {
+                file = files[i];
                 if ( acceptedTypes[file.type] === true ) {
                     processing += 1;
                     var reader = new FileReader();
                     reader.filename = file.name;
-                    reader.atlas = this.atlas;
                     reader.onload = onloadBinded;
                     reader.readAsDataURL(file);
                 }

@@ -10,7 +10,7 @@ AtlasCanvasSettings = (function () {
 
         this.elementBgColor = new FIRE.Color( 0, 0.28, 1, 0.5 );
         this.elementSelectColor = new FIRE.Color(1,1,0,1);
-        this.backgroundColor = new FIRE.Color(0,0,0,0);
+        this.backgroundColor = new FIRE.Color(0,0,0,0.2);
         this.showCheckerboard = true;
         this.smoothCanvas = true;
     }

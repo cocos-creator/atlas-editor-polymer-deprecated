@@ -145,6 +145,10 @@ var libpng = function () {
     };
     
     png.prototype.write_imageData = function (imageData) {
+        if (typeof(imageData) === 'undefined') {
+            console.error('data not specified');
+            return;
+        }
         if (Array.isArray(imageData)) {
             imageData = new Uint8Array(imageData);
         }

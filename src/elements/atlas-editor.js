@@ -46,75 +46,47 @@
         },
 
         exportAction: function () {
-            // 测试代码，需要整理
-            window.navigator.saveBlob = window.navigator.saveBlob || window.navigator.msSaveBlob;
-            // export json
+            // build json
             var json = FIRE.serialize(this.atlas);
-            var blob = new Blob([json], { type: "text/plain;charset=utf-8" });    // not support 'application/json'
-            var name = 'atlas';
-            if (window.navigator.saveBlob) {
-                window.navigator.saveBlob(blob, name + ".json");
-            }
-            else {
-                var jsonDataURL = (window.URL || window.webkitURL).createObjectURL(blob);
-                FIRE.downloadDataUrl(jsonDataURL, name + ".json");
-            }
-            // export png
+            // build png
             var data = this.atlasCanvas.export();
-            var canvas = data.canvas;
-            var buffer = data.buffer;
-            var pngDataURL, blobBuilderObject;
-            var encodeByCanvas = false;     // encodedByCanvas not contour bleeding
-            if (encodeByCanvas) {
-                canvas.toBlob = canvas.toBlob || canvas.msToBlob;
-                if (canvas.toBlob && window.navigator.saveBlob) {
-                    window.navigator.saveBlob(canvas.toBlob(), name + ".png");
-                }
-                else {
-                    pngDataURL = canvas.toDataURL("image/png");
-                    FIRE.downloadDataUrl(pngDataURL, name + ".png");
-                }
+            // export
+            var name = 'atlas';
+            debugger;
+            if (FIRE.isnw) {
+                FIRE.getSavePath(name + '.json', 'Key_ExportAtlas', function (txtPath) {
+                    var pngPath = FIRE.setExtension(txtPath, '.png');
+                    var Path = require('path');
+                    var basename = Path.basename(txtPath, Path.extname(txtPath));
+                    
+                    FIRE.saveText(json, basename + ".json", txtPath);
+                    FIRE.savePng(data.canvas, basename, pngPath, data.buffer);
+                    
+                    var nwgui = require('nw.gui');
+                    nwgui.Shell.showItemInFolder(txtPath);
+                });
             }
             else {
-                console.time('libpng');
-
-                var png = libpng.createWriter(canvas.width, canvas.height);
-                png.set_filter(libpng.FILTER_NONE);
-                png.set_compression_level(3);
-                png.write_imageData(buffer);
-                png.write_end();
-
-                console.timeEnd('libpng');
-                console.log('Bytes: ' + png.data.length);
-                console.time('encode base64');
-
-                pngDataURL = png.encode_base64();
-
-                console.timeEnd('encode base64');
-            
-                // save png data
-                if (Blob && window.navigator.saveBlob) {
-                    blob = new Blob([new Uint8Array(png.data)], {type: 'image/png'});
-                    window.navigator.saveBlob(blob, name + ".png");
-                }
-                else {
-                    pngDataURL = 'data:image/png;base64,' + pngDataURL;
-                    //pngDataURL = 'i' + pngDataURL;
-                    //var url2 = canvas.toDataURL("image/png");
-                    //url2 = url2.slice('data:image/png;base64,'.length, 1000);
-                    //console.log(pngDataURL.slice(0, 100));
-                    //console.log(pngDataURL.length);
-                    //console.log(pngDataURL.slice(pngDataURL.length - 100));
-                    //console.log(pngDataURL);
-                    //console.log(url2.slice(0, 100));
-                    //console.log(url2.length);
-                    //console.log(url2.slice(url2.length - 100));
-                    //console.log(url2);
-                    //console.log('decode64 pngDataURL ' + decode64(pngDataURL));
-                    //console.log('decode64 url2 ' + decode64(url2));
-                    FIRE.downloadDataUrl(pngDataURL, name + ".png");
-                }
+                FIRE.saveText(json, name + ".json", null);
+                FIRE.savePng(data.canvas, name, null, data.buffer);
             }
+            //console.time('encode base64');
+            //var pngDataURL = png.encode_base64();
+            //pngDataURL = 'data:image/png;base64,' + pngDataURL;
+            //console.timeEnd('encode base64');
+                
+            //var url2 = canvas.toDataURL("image/png");
+            //url2 = url2.slice('data:image/png;base64,'.length, 1000);
+            //console.log(pngDataURL.slice(0, 100));
+            //console.log(pngDataURL.length);
+            //console.log(pngDataURL.slice(pngDataURL.length - 100));
+            //console.log(pngDataURL);
+            //console.log(url2.slice(0, 100));
+            //console.log(url2.length);
+            //console.log(url2.slice(url2.length - 100));
+            //console.log(url2);
+            //console.log('decode64 pngDataURL ' + decode64(pngDataURL));
+            //console.log('decode64 url2 ' + decode64(url2));
         },
 
         importAction: function ( event, files ) {

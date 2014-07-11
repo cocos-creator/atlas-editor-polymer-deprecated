@@ -615,6 +615,7 @@
             this.repaint();
         },
 
+        // if not exporting, just draw atlas to current paper project
         rebuildAtlas: function (forExport) {
             if (!forExport) {
                 this.atlasLayer.removeChildren();
@@ -663,15 +664,19 @@
 
             var ctx = canvas.getContext('2d');
             var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            var pixelBuffer = imageData.data;
 
-            //for (var i = 2, pixels = imageData.data, len = pixels.length; i < len; i += 4) {
-            //    pixels[i] = 255;
-            //    pixels[i+1] = 1;
+            //for (var i = 2, len = pixelBuffer.length; i < len; i += 4) {
+            //    if (pixelBuffer[i + 1] === 0) {
+            //        pixelBuffer[i] = 255;
+            //    }
             //}
 
+            pixelBuffer = Utils.applyBleed(this.atlas, pixelBuffer);   // 这里应该是一个导出前才进行的操作，否则对像素的更改有可能被paper重绘时覆盖
+            
             return {
                 canvas: canvas,
-                buffer: imageData.data,
+                buffer: pixelBuffer,
             };
         },
     });

@@ -15,6 +15,7 @@ var paths = {
     ext_editor_ui: [ 
         '../editor-ui-polymer/bin/editor-ui.css',
         '../editor-ui-polymer/bin/editor-ui.html',
+        '../editor-ui-polymer/bin/img/**/*.png',
     ],
     ext: 'src/ext/pngcrush_modified.js',
     img: 'src/img/**/*',

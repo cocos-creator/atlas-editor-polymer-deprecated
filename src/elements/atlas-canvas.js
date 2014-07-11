@@ -596,6 +596,8 @@
                 this.checkerboard.remove();
             }
             this.checkerboard = this._createCheckerboard( this.atlas.width, this.atlas.height );
+            this.background.position = [this.atlas.width*0.5, this.atlas.height*0.5];
+            this.background.size = [this.atlas.width, this.atlas.height];
             this.atlasBGLayer.addChild(this.checkerboard);
             this.background.insertAbove(this.checkerboard);
 

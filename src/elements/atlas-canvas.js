@@ -236,11 +236,6 @@
             event.stopPropagation();
         },
 
-        contextmenuAction: function ( event ) {
-            event.preventDefault();
-            event.stopPropagation();
-        },
-
         setZoom: function ( zoom ) {
             if ( this.zoom != zoom ) {
                 this.zoom = zoom;

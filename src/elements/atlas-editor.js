@@ -41,7 +41,7 @@
             this.canvasSettings = new AtlasCanvasSettings();
         },
 
-        ready: function () {
+        domReady: function () {
             this.atlasCanvas = this.$["atlas-canvas"];
         },
 

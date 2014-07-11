@@ -7,7 +7,7 @@
             this.transformSelectRect = null;
         },
 
-        ready: function () {
+        domReady: function () {
             var canvasEL = this.$.canvas;
             var self = this;
 
@@ -215,9 +215,7 @@
                     _applyCursor(event);
                 }
             };
-        },
 
-        domReady: function () {
             this.resize( this.parentNode.clientWidth, this.parentNode.clientHeight );
         },
 

@@ -41,7 +41,7 @@ gulp.task('cp-core', function() {
     ;
 });
 gulp.task('cp-editor-ui', function() {
-    return gulp.src(paths.ext_editor_ui)
+    return gulp.src(paths.ext_editor_ui, {base: '../editor-ui-polymer/bin/'})
     .pipe(gulp.dest('ext/fire-editor-ui'))
     ;
 });

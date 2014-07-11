@@ -154,8 +154,8 @@
                     return;
                 }
 
-                // process camera move
-                var rightButton = event.event.which === 3;
+                // process camera move ( rightButton or midButton )
+                var rightButton = (event.event.which === 3 || event.event.which === 2);
                 rightButton = rightButton || (event.event.buttons !== 'undefined' && (event.event.buttons & 2) > 0); // tweak for firefox and IE
                 if (rightButton) {
                     self.draggingCanvas = true;

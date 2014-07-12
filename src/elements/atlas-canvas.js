@@ -383,14 +383,14 @@
             var tmpLayer = PaperUtils.createLayer();
             tmpLayer.activate();
 
-            var gridColor2 = new paper.Color(135/255, 135/255, 135/255, 1);
+            var gridColor = new paper.Color(245/255, 245/255, 245/255, 1);
             var gridSize = 32;
             var posFilter = Math.round;
             var sizeFilter = Math.floor;
             var zoomedGridSize = sizeFilter(gridSize);
             var template = new paper.Shape.Rectangle(0, 0, zoomedGridSize, zoomedGridSize);
             template.remove();
-            template.fillColor = gridColor2;
+            template.fillColor = gridColor;
             template.pivot = [-zoomedGridSize/2, -zoomedGridSize/2];
             var symbol = new paper.Symbol(template);
             for (var x = 0; x < width; x += gridSize) {
@@ -448,8 +448,7 @@
             }
             if ( this.background === undefined ) {
                 this.background = new paper.Shape.Rectangle(0, 0, this.atlas.width, this.atlas.height);
-                this.background.fillColor = new paper.Color( 0,0,0,0 );
-                this.background.insertAbove(this.checkerboard);
+                this.background.insertBelow(this.checkerboard);
             }
         }, 
 
@@ -491,8 +490,7 @@
                 var outline = child.data.outline;
                 if (outline.visible) {
                     var outlineBounds = bgItem.bounds;
-                    var strokeWidth = 2;
-                    outlineBounds = outlineBounds.expand(-strokeWidth/this.zoom);
+                    outlineBounds = outlineBounds.expand((-outline.strokeWidth + 2)/this.zoom);
                     outline.position = [
                         outlineBounds.center.x*this.zoom, 
                         outlineBounds.center.y*this.zoom
@@ -501,8 +499,6 @@
                         outlineBounds.width*this.zoom, 
                         outlineBounds.height*this.zoom
                     ];
-                    outline.strokeColor = PaperUtils.color( this.elementSelectColor );
-                    outline.dashArray = [5,3];
                 }
             }
         },
@@ -634,7 +630,9 @@
 
                     raster.data.outline = new paper.Shape.Rectangle(paper.Item.NO_INSERT);
                     raster.data.outline.style = {
-                        strokeWidth: 2,
+                        strokeWidth: 1,
+                        strokeColor: PaperUtils.color( this.elementSelectColor ),
+                        dashArray: [4, 3],
                     };
                     this.atlasHandlerLayer.addChild(raster.data.outline);
                     raster.data.outline.visible = false;

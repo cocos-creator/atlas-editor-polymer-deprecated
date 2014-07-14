@@ -51,24 +51,26 @@
             // build png
             var data = this.atlasCanvas.export();
             // export
+            function doExport(basename, text, txtPath, canvas, imgPath, imgBuffer) {
+                FIRE.saveText(text, basename + ".json", txtPath);
+                FIRE.savePng(canvas, basename, imgPath, imgBuffer);
+            }
+
             var name = 'atlas';
-            debugger;
             if (FIRE.isnw) {
                 FIRE.getSavePath(name + '.json', 'Key_ExportAtlas', function (txtPath) {
                     var pngPath = FIRE.setExtension(txtPath, '.png');
                     var Path = require('path');
                     var basename = Path.basename(txtPath, Path.extname(txtPath));
                     
-                    FIRE.saveText(json, basename + ".json", txtPath);
-                    FIRE.savePng(data.canvas, basename, pngPath, data.buffer);
+                    doExport(basename, json, txtPath, data.canvas, pngPath, data.buffer);
                     
                     var nwgui = require('nw.gui');
                     nwgui.Shell.showItemInFolder(txtPath);
                 });
             }
             else {
-                FIRE.saveText(json, name + ".json", null);
-                FIRE.savePng(data.canvas, name, null, data.buffer);
+                doExport(name, json, null, data.canvas, null, data.buffer);
             }
             //console.time('encode base64');
             //var pngDataURL = png.encode_base64();

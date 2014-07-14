@@ -383,7 +383,7 @@
             var tmpLayer = PaperUtils.createLayer();
             tmpLayer.activate();
 
-            var gridColor = new paper.Color(245/255, 245/255, 245/255, 1);
+            var gridColor = new paper.Color(240/255, 240/255, 240/255, 1);
             var gridSize = 32;
             var posFilter = Math.round;
             var sizeFilter = Math.floor;

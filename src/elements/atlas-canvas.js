@@ -459,28 +459,28 @@
             var children = this.atlasLayer.children;
             for (var i = 0; i < children.length; ++i) {
                 var child = children[i];
-                var isRaster = child.data && child.data.texture;
+                var isRaster = child.data && child.data.sprite;
                 if (!isRaster) {
                     continue;
                 }
 
                 // update atlas
-                var tex = child.data.texture;
-                if (tex.rotated) {
-                    child.pivot = [-tex.width * 0.5, tex.height * 0.5];
+                var sprite = child.data.sprite;
+                if (sprite.rotated) {
+                    child.pivot = [-sprite.width * 0.5, sprite.height * 0.5];
                     child.rotation = 90;
                 }
                 else {
-                    child.pivot = [-tex.width * 0.5, -tex.height * 0.5];
+                    child.pivot = [-sprite.width * 0.5, -sprite.height * 0.5];
                     child.rotation = 0;
                 }
-                child.position = [tex.x, tex.y];
+                child.position = [sprite.x, sprite.y];
 
                 // update rectangle
-                var left = tex.x;
-                var top = tex.y;
-                var w = tex.rotatedWidth;
-                var h = tex.rotatedHeight;
+                var left = sprite.x;
+                var top = sprite.y;
+                var w = sprite.rotatedWidth;
+                var h = sprite.rotatedHeight;
                 var bgItem = child.data.bgItem;
                 bgItem.size = [w, h];
                 bgItem.position = new paper.Rectangle(left, top, w, h).center;
@@ -570,9 +570,9 @@
         _moveSelected: function ( items, delta ) {
             for ( var i = 0; i < items.length; ++i ) {
                 var item = items[i];
-                var tex = item.data.texture;
-                tex.x = tex.x + delta.x/this.zoom;
-                tex.y = tex.y + delta.y/this.zoom;
+                var sprite = item.data.sprite;
+                sprite.x = sprite.x + delta.x/this.zoom;
+                sprite.y = sprite.y + delta.y/this.zoom;
             }
             this.repaint();
         },
@@ -617,12 +617,12 @@
             }
 
             var i = 0, j = 0, len = 0;
-            for (i = 0; i < this.atlas.textures.length; ++i) {
-                var tex = this.atlas.textures[i];
-                var raster = PaperUtils.createSpriteRaster(tex);
+            for (i = 0; i < this.atlas.sprites.length; ++i) {
+                var sprite = this.atlas.sprites[i];
+                var raster = PaperUtils.createSpriteRaster(sprite);
                 raster.selectable = true;
-                raster.data.texture = tex;
-                raster.position = [tex.x, tex.y];
+                raster.data.sprite = sprite;
+                raster.position = [sprite.x, sprite.y];
 
                 if ( !forExport ) {
                     raster.data.bgItem = new paper.Shape.Rectangle(paper.Item.NO_INSERT);

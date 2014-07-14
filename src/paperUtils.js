@@ -1,13 +1,13 @@
 var PaperUtils;
 (function (PaperUtils) {
 
-    PaperUtils.createSpriteRaster = function (tex) {
-        var tmpRawRaster = new paper.Raster(tex.image);
-        var trimRect = new paper.Rectangle(tex.trimX, tex.trimY, tex.width, tex.height);
+    PaperUtils.createSpriteRaster = function (sprite) {
+        var tmpRawRaster = new paper.Raster(sprite.texture.image);
+        var trimRect = new paper.Rectangle(sprite.trimX, sprite.trimY, sprite.width, sprite.height);
         var raster = tmpRawRaster.getSubRaster(trimRect);
         tmpRawRaster.remove();  // can only be removed after getSubRaster
-        raster.pivot = [-tex.width * 0.5, -tex.height * 0.5];
-        if (tex.rotated) {
+        raster.pivot = [-sprite.width * 0.5, -sprite.height * 0.5];
+        if (sprite.rotated) {
             raster.pivot = [raster.pivot.x, -raster.pivot.y];
             raster.rotation = 90;
         }

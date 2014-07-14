@@ -172,8 +172,8 @@
                 bufIdxOffsets[j] = sampleXOffsets[j] * pixelBytes + sampleYOffsets[j] * ditch;
             }
             // bleed elements
-            for (i = 0, tex = null; i < atlas.textures.length; i++) {
-                tex = atlas.textures[i];
+            for (i = 0, tex = null; i < atlas.sprites.length; i++) {
+                tex = atlas.sprites[i];
                 applyContourBleed(resultBuffer, srcBuffer, atlas.width, new FIRE.Rect(tex.x, tex.y, tex.rotatedWidth, tex.rotatedHeight), 
                                   sampleXOffsets, sampleYOffsets, bufIdxOffsets);
             }
@@ -181,8 +181,8 @@
         }
         if (atlas.usePaddingBleed) {
             console.time("apply padding bleed");
-            for (i = 0, tex = null; i < atlas.textures.length; i++) {
-                tex = atlas.textures[i];
+            for (i = 0, tex = null; i < atlas.sprites.length; i++) {
+                tex = atlas.sprites[i];
                 applyPaddingBleed(resultBuffer, srcBuffer, atlas.width, atlas.height, 
                                   new FIRE.Rect(tex.x, tex.y, tex.rotatedWidth, tex.rotatedHeight));
             }

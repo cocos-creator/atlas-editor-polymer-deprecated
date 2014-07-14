@@ -46,37 +46,42 @@
         },
 
         exportAction: function () {
-            // build json
-            var json = FIRE.serialize(this.atlas);
-            // build png
-            var data = this.atlasCanvas.export();
             // export
-            function doExport(basename, text, txtPath, canvas, imgPath, imgBuffer) {
-                FIRE.saveText(text, basename + ".json", txtPath);
-                FIRE.savePng(canvas, basename, imgPath, imgBuffer);
+            var self = this;
+            function doExport(basename, txtPath, imgPath) {
+                // build png
+                var imgData = self.atlasCanvas.export();
+                var canvas = imgData.canvas;
+                var pixelBuffer = imgData.buffer;
+                self.atlas.filename = basename + '.png';
+                exportCocos2d(self.atlas, function (text) {
+                    FIRE.saveText(text, basename + ".plist", txtPath);
+                    FIRE.savePng(canvas, basename, imgPath, pixelBuffer);
+                });
             }
 
             var name = 'atlas';
             if (FIRE.isnw) {
-                FIRE.getSavePath(name + '.json', 'Key_ExportAtlas', function (txtPath) {
+                FIRE.getSavePath(name + '.plist', 'Key_ExportAtlas', function (txtPath) {
                     var pngPath = FIRE.setExtension(txtPath, '.png');
                     var Path = require('path');
                     var basename = Path.basename(txtPath, Path.extname(txtPath));
                     
-                    doExport(basename, json, txtPath, data.canvas, pngPath, data.buffer);
+                    doExport(basename, txtPath, pngPath);
                     
                     var nwgui = require('nw.gui');
                     nwgui.Shell.showItemInFolder(txtPath);
                 });
             }
             else {
-                doExport(name, json, null, data.canvas, null, data.buffer);
+                doExport(name, null, null);
             }
+            
             //console.time('encode base64');
             //var pngDataURL = png.encode_base64();
             //pngDataURL = 'data:image/png;base64,' + pngDataURL;
             //console.timeEnd('encode base64');
-                
+            
             //var url2 = canvas.toDataURL("image/png");
             //url2 = url2.slice('data:image/png;base64,'.length, 1000);
             //console.log(pngDataURL.slice(0, 100));
@@ -102,18 +107,18 @@
             var onload = function (event) {
                 var filename = event.target.filename;   // target.filename may be deleted later
                 var imgOnLoad = function () {
-                    var texture = new FIRE.SpriteTexture(img);
-                    texture.name = filename;
+                    var sprite = new FIRE.Sprite(img);
+                    sprite.name = filename;
 
                     if (this.atlas.trim) {
                         var trimRect = FIRE.getTrimRect(img, this.atlas.trimThreshold);
-                        texture.trimX = trimRect.x;
-                        texture.trimY = trimRect.y;
-                        texture.width = trimRect.width;
-                        texture.height = trimRect.height;
+                        sprite.trimX = trimRect.x;
+                        sprite.trimY = trimRect.y;
+                        sprite.width = trimRect.width;
+                        sprite.height = trimRect.height;
                     }
 
-                    this.atlas.add(texture);
+                    this.atlas.add(sprite);
                     processing -= 1;
                     
                     // checkIfFinished

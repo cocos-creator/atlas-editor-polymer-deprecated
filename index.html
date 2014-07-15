@@ -9,13 +9,16 @@
         <link rel="import" href="ext/fire-editor-ui/editor-ui.html">
         <link rel="import" href="bin/app.html">
 
-        <script type="text/javascript" src="ext/platform/platform.js"></script>
+        <!-- init before external -->
+        <script type="text/javascript" src="bin/libpngWrapper.js"></script>
+        <!-- external -->
         <script type="text/javascript" src="ext/fire-core/core.dev.js"></script>
+        <script type="text/javascript" src="ext/platform/platform.js"></script>
         <script type="text/javascript" src="ext/paper/dist/paper-core.js"></script>
         <script type="text/javascript" src="ext/dustjs-linkedin/dist/dust-full.min.js"></script>
-        <script type="text/javascript" src="bin/exporters/cocos2d.js"></script>
-        <script type="text/javascript" src="bin/libpngWrapper.js"></script>
         <script type="text/javascript" src="ext/pngcrush.min.fixed.js"></script>
+        <!-- init after external -->
+        <script type="text/javascript" src="bin/exporters/cocos2d.js"></script>
 
         <style>
             body {

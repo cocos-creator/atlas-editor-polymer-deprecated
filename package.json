@@ -12,9 +12,9 @@
         "height": 720
     },
     "dependencies": {
-        "express": ""
     },
     "devDependencies": {
+        "express": "",
         "gulp": "",
         "gulp-clean": "",
         "gulp-util": "",

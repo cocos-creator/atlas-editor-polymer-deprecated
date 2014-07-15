@@ -490,7 +490,8 @@
                 var outline = child.data.outline;
                 if (outline.visible) {
                     var outlineBounds = bgItem.bounds;
-                    outlineBounds = outlineBounds.expand((-outline.strokeWidth + 2)/this.zoom);
+                    outlineBounds = outlineBounds.expand(-outline.strokeWidth/this.zoom);
+                    // outlineBounds = outlineBounds.expand((-outline.strokeWidth + 2)/this.zoom);
                     outline.position = [
                         outlineBounds.center.x*this.zoom, 
                         outlineBounds.center.y*this.zoom
@@ -499,6 +500,7 @@
                         outlineBounds.width*this.zoom, 
                         outlineBounds.height*this.zoom
                     ];
+                    outline.strokeColor = PaperUtils.color( this.elementSelectColor );
                 }
             }
         },
@@ -630,7 +632,7 @@
 
                     raster.data.outline = new paper.Shape.Rectangle(paper.Item.NO_INSERT);
                     raster.data.outline.style = {
-                        strokeWidth: 1,
+                        strokeWidth: 2,
                         strokeColor: PaperUtils.color( this.elementSelectColor ),
                         dashArray: [4, 3],
                     };

@@ -14,6 +14,7 @@
             'canvasSettings.smoothCanvas': 'smoothCanvasChanged',
             'canvasSettings.showCheckerboard': 'showCheckerboardChanged',
 
+            'canvasSettings.customBackgroundColor': 'repaintAtlasCanvas',
             'canvasSettings.elementBgColor.r': 'repaintAtlasCanvas',
             'canvasSettings.elementBgColor.g': 'repaintAtlasCanvas',
             'canvasSettings.elementBgColor.b': 'repaintAtlasCanvas',

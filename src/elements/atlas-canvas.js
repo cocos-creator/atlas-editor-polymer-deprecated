@@ -383,7 +383,7 @@
             var tmpLayer = PaperUtils.createLayer();
             tmpLayer.activate();
 
-            var gridColor = new paper.Color(240/255, 240/255, 240/255, 1);
+            var gridColor = new paper.Color(128/255, 128/255, 128/255, 1);
             var gridSize = 32;
             var posFilter = Math.round;
             var sizeFilter = Math.floor;
@@ -446,15 +446,16 @@
                 this.checkerboard = this._createCheckerboard( this.atlas.width, this.atlas.height );
                 this.atlasBGLayer.addChild(this.checkerboard);
             }
-            if ( this.background === undefined ) {
-                this.background = new paper.Shape.Rectangle(0, 0, this.atlas.width, this.atlas.height);
-                this.background.insertBelow(this.checkerboard);
+            if ( this.checkerboardMask === undefined ) {
+                this.checkerboardMask = new paper.Shape.Rectangle(0, 0, this.atlas.width, this.atlas.height);
+                this.checkerboardMask.insertAbove(this.checkerboard);
             }
         }, 
 
         _paint: function () {
-            // update background
-            this.background.fillColor = PaperUtils.color( this.backgroundColor );
+            // update background color
+            this.checkerboardMask.visible = this.customBackgroundColor;
+            this.checkerboardMask.fillColor = PaperUtils.color( this.backgroundColor );
 
             var children = this.atlasLayer.children;
             for (var i = 0; i < children.length; ++i) {
@@ -594,10 +595,10 @@
                 this.checkerboard.remove();
             }
             this.checkerboard = this._createCheckerboard( this.atlas.width, this.atlas.height );
-            this.background.position = [this.atlas.width*0.5, this.atlas.height*0.5];
-            this.background.size = [this.atlas.width, this.atlas.height];
+            this.checkerboardMask.position = [this.atlas.width*0.5, this.atlas.height*0.5];
+            this.checkerboardMask.size = [this.atlas.width, this.atlas.height];
             this.atlasBGLayer.addChild(this.checkerboard);
-            this.background.insertAbove(this.checkerboard);
+            this.checkerboardMask.insertAbove(this.checkerboard);
 
             //
             var borderWidth = 2;

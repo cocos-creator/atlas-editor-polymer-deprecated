@@ -10,6 +10,7 @@
     <atlas-canvas 
         id="atlas-canvas" 
         atlas="{{atlas}}"
+        customBackgroundColor="{{canvasSettings.customBackgroundColor}}"
         backgroundColor="{{canvasSettings.backgroundColor}}"
         elementBgColor="{{canvasSettings.elementBgColor}}"
         elementSelectColor="{{canvasSettings.elementSelectColor}}"
@@ -49,7 +50,11 @@
     <fire-ui-section title="Canvas">                                                                                         
         <fire-ui-field name="Smooth Canvas" value="{{canvasSettings.smoothCanvas}}"></fire-ui-field>                                 
         <fire-ui-field name="Show Checkerboard" value="{{canvasSettings.showCheckerboard}}"></fire-ui-field>                         
-        <fire-ui-field name="Background" value="{{canvasSettings.backgroundColor}}"></fire-ui-field>                                 
+        <fire-ui-custom-field name="Background">                                      
+            <fire-ui-checkbox value="{{canvasSettings.customBackgroundColor}}"></fire-ui-checkbox>   
+            <span class="space"></span>                                                
+            <fire-ui-color class="flex-1" value="{{canvasSettings.backgroundColor}}"></fire-ui-color>
+        </fire-ui-custom-field>                                                        
         <fire-ui-field name="Element Background" value="{{canvasSettings.elementBgColor}}"></fire-ui-field>                          
         <fire-ui-field name="Element Select" value="{{canvasSettings.elementSelectColor}}"></fire-ui-field>                          
     </fire-ui-section>                                                                                                       

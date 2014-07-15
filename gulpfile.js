@@ -17,7 +17,7 @@ var paths = {
         '../editor-ui-polymer/bin/editor-ui.html',
         '../editor-ui-polymer/bin/img/**/*.png',
     ],
-    ext: 'src/ext/pngcrush_modified.js',
+    ext: 'src/ext/pngcrush.min.fixed.js',
     img: 'src/img/**/*',
     css: 'src/**/*.styl',
     html: 'src/**/*.html',

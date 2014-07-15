@@ -41,7 +41,7 @@ vimfiles/bundle/*
 node_modules/
 bower_components/
 bin/
-ext/
+/ext/
 
 # scripts
 Build.bat

@@ -91,7 +91,7 @@ gulp.task('js-no-uglify', function() {
 
 // html
 gulp.task('build-html', ['cp-html', 'css', 'js-no-uglify'], function() {
-    return gulp.src('bin/all.html')
+    return gulp.src('bin/app.html')
     .pipe(vulcanize({
         dest: 'bin',
         inline: true,
@@ -101,7 +101,7 @@ gulp.task('build-html', ['cp-html', 'css', 'js-no-uglify'], function() {
     ;
 });
 gulp.task('build-html-dev', ['cp-html', 'css', 'js-no-uglify'], function() {
-    return gulp.src('bin/all.html')
+    return gulp.src('bin/app.html')
     .pipe(vulcanize({
         dest: 'bin',
         inline: true,

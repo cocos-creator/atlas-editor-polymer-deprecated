@@ -27,15 +27,15 @@
 
             this.project.activate();
 
-            // rootLayer
-            this.rootLayer = this.project.activeLayer;
-            this.rootLayer.applyMatrix = false;
-            this.rootLayer.position = [viewSize.width * 0.5, viewSize.height * 0.5];
-            this.rootLayer.pivot = [0,0];
+            // sceneLayer
+            this.sceneLayer = this.project.activeLayer;
+            this.sceneLayer.applyMatrix = false;
+            this.sceneLayer.position = [viewSize.width * 0.5, viewSize.height * 0.5];
+            this.sceneLayer.pivot = [0,0];
 
             // bglayer
             this.bgLayer = PaperUtils.createLayer();
-            this.bgLayer.position = [viewSize.width * 0.5, viewSize.height * 0.5];
+            this.bgLayer.position = [0,0];
             this.bgLayer.pivot = [0,0];
             this.project.layers.unshift(this.bgLayer);
 
@@ -45,9 +45,9 @@
             this.fgLayer.pivot = [0,0];
             this.project.layers.push(this.fgLayer);
 
-            this.sceneLayer = PaperUtils.createLayer();
-            this.rootLayer.addChildren ([
-                this.sceneLayer,
+            this.cameraLayer = PaperUtils.createLayer();
+            this.sceneLayer.addChildren ([
+                this.cameraLayer,
             ]);
 
             // create select rect
@@ -112,20 +112,23 @@
             tool.onMouseMove = function (event) {
                 _applyCursor(event);
                 hoverItem = event.item;
+
+                if ( self.debugText ) {
+                    // var trans = self.atlasLayer.globalMatrix.inverseTransform(event.point);
+                    var trans = self.atlasLayer.globalMatrix.transform(0,0);
+                    self.debugText.content = trans.toString() + ", " + event.point.toString();
+                }
             };
 
             tool.onMouseDrag = function (event) {
                 // process camera move
                 if (self.draggingCanvas) {
                     // drag viewport
-                    self.sceneLayer.position = [
-                        self.sceneLayer.position.x + event.delta.x / self.zoom,
-                        self.sceneLayer.position.y + event.delta.y / self.zoom,
+                    self.cameraLayer.position = [
+                        self.cameraLayer.position.x + event.delta.x / self.zoom,
+                        self.cameraLayer.position.y + event.delta.y / self.zoom,
                     ];
-                    self.bgLayer.position = [ 
-                        self.bgLayer.position.x + event.delta.x,
-                        self.bgLayer.position.y + event.delta.y,
-                    ];
+                    self.repaint();
                 }
 
                 // process rect select
@@ -135,7 +138,7 @@
                     self.selectRect.position = rect.center;
                     self.selectRect.size = rect.size;
 
-                    self.doRectSelect(self.sceneLayer);
+                    self.doRectSelect(self.cameraLayer);
                 }
 
                 // process dragging item
@@ -200,7 +203,7 @@
                     FIRE.removeDragGhost();
                 }
                 if ( self.rectSelecting ) {
-                    self.confirmRectSelect(self.sceneLayer);
+                    self.confirmRectSelect(self.cameraLayer);
 
                     self.rectSelecting = false;
                     self.selectRect.position = [0,0]; 
@@ -239,14 +242,14 @@
         setZoom: function ( zoom ) {
             if ( this.zoom != zoom ) {
                 this.zoom = zoom;
-                this.rootLayer.scaling = [zoom, zoom];
+                this.sceneLayer.scaling = [zoom, zoom];
                 this.project.view.update();
                 this._zoomChanged(zoom);
             }
         },
 
         setPos: function ( x, y ) {
-            this.sceneLayer.position = [x, y];
+            this.cameraLayer.position = [x, y];
         },
 
         setSmoothCanvas: function ( smoothCanvas ) {
@@ -263,8 +266,7 @@
 
             // resize
             this.project.view.viewSize = [width, height];
-            this.rootLayer.position = [width * 0.5, height * 0.5];
-            this.bgLayer.position = [width * 0.5, height * 0.5];
+            this.sceneLayer.position = [width * 0.5, height * 0.5];
 
             this.repaint();
         },
@@ -416,7 +418,7 @@
             this.atlasHandlerLayer = PaperUtils.createLayer();
             this.atlasHandlerLayer.position = [-this.atlas.width*0.5, -this.atlas.height*0.5];
 
-            this.sceneLayer.addChildren ([
+            this.cameraLayer.addChildren ([
                 this.atlasBGLayer,
                 this.atlasLayer,
                 this.atlasHandlerLayer,
@@ -424,22 +426,6 @@
 
             // init atlas-bg-layer
             this.atlasBGLayer.activate();
-
-            // create border rect
-            if ( this.border === undefined ) {
-                var borderWidth = 2;
-                var borderRect = new paper.Rectangle(0, 0, this.atlas.width, this.atlas.height);
-                borderRect = borderRect.expand(borderWidth);
-                this.border = new paper.Shape.Rectangle(borderRect);
-                this.border.style = {
-                    fillColor: new paper.Color(204/255, 204/255, 204/255, 1),
-                    strokeWidth: borderWidth,
-                    strokeColor: new paper.Color(0.08, 0.08, 0.08, 1),
-                    shadowColor: [0, 0, 0, 0.5],
-                    shadowBlur: 7,
-                    shadowOffset: new paper.Point(2, 2),
-                };
-            }
 
             // create checkerboard
             if ( this.checkerboard === undefined ) {
@@ -450,9 +436,42 @@
                 this.checkerboardMask = new paper.Shape.Rectangle(0, 0, this.atlas.width, this.atlas.height);
                 this.checkerboardMask.insertAbove(this.checkerboard);
             }
+
+            // init debug text
+            this.fgLayer.activate();
+            if ( this.debugText === undefined ) {
+                var text = new paper.PointText(10,20);
+                text.justification = 'left';
+                text.fillColor = 'white';
+                text.fontSize = 16;
+                text.content = 'Hello World';
+                this.debugText = text;
+            }
+
+            // create border rect
+            this.bgLayer.activate();
+            if ( this.border === undefined ) {
+                var borderWidth = 2;
+                this.border = new paper.Shape.Rectangle([0,0], [this.atlas.width,this.atlas.height]);
+                this.border.style = {
+                    fillColor: new paper.Color(204/255, 204/255, 204/255, 1),
+                    strokeWidth: borderWidth,
+                    strokeColor: new paper.Color(0.08, 0.08, 0.08, 1),
+                    shadowColor: [0, 0, 0, 0.5],
+                    shadowBlur: 7,
+                    shadowOffset: new paper.Point(2, 2),
+                };
+            }
         }, 
 
         _paint: function () {
+            var posFilter = Math.round;
+            var sizeFilter = Math.floor;
+
+            // without this, atlasLayer's global matrix can't update
+            this.project.view.update();
+            var atlasLayerMatrix = this.atlasLayer.globalMatrix;
+
             // update background color
             this.checkerboardMask.visible = this.customBackgroundColor;
             this.checkerboardMask.fillColor = PaperUtils.color( this.backgroundColor );
@@ -504,6 +523,26 @@
                     outline.strokeColor = PaperUtils.color( this.elementSelectColor );
                 }
             }
+
+            //
+            var borderTL = atlasLayerMatrix.transform([0,0]);
+            var borderBR = atlasLayerMatrix.transform([this.atlas.width,this.atlas.height]);
+            borderTL.x = posFilter(borderTL.x);
+            borderTL.y = posFilter(borderTL.y);
+            borderBR.x = posFilter(borderBR.x);
+            borderBR.y = posFilter(borderBR.y);
+
+            var strokeWidth = this.border.strokeWidth;
+            var size = new paper.Point(
+                borderBR.x-borderTL.x+strokeWidth, 
+                borderBR.y-borderTL.y+strokeWidth
+            );
+            var center = new paper.Point( 
+                borderTL.x+size.x/2-strokeWidth/2, 
+                borderTL.y+size.y/2-strokeWidth/2
+            );
+            this.border.position = center;
+            this.border.size = size;
         },
 
         _dragEnterAction: function ( event ) {
@@ -601,11 +640,11 @@
             this.checkerboardMask.insertAbove(this.checkerboard);
 
             //
-            var borderWidth = 2;
-            var borderRect = new paper.Rectangle(0, 0, this.atlas.width, this.atlas.height);
-            borderRect = borderRect.expand(borderWidth);
-            this.border.size = borderRect.size;
-            this.border.position = [(borderRect.size.width-borderWidth)*0.5,(borderRect.size.height-borderWidth)*0.5];
+            // var borderWidth = 2;
+            // var borderRect = new paper.Rectangle(0, 0, this.atlas.width, this.atlas.height);
+            // borderRect = borderRect.expand(borderWidth);
+            // this.border.size = borderRect.size;
+            // this.border.position = [(borderRect.size.width-borderWidth)*0.5,(borderRect.size.height-borderWidth)*0.5];
 
             this.setZoom(1.0);
             this.setPos(0,0);

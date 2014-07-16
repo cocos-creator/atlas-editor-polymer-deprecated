@@ -31,11 +31,11 @@
 {~n}            <key>format</key>
 {~n}            <integer>0</integer>
 {~n}            <key>realTextureFileName</key>
-{~n}            <string>{filename}</string>
+{~n}            <string>{textureFileName}</string>
 {~n}            <key>size</key>
 {~n}            <string>{{width},{height}}</string>
 {~n}            <key>textureFileName</key>
-{~n}            <string>{filename}</string>
+{~n}            <string>{textureFileName}</string>
 {~n}        </dict>
 {~n}        <key>texture</key>
 {~n}        <dict>

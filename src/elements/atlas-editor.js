@@ -47,54 +47,40 @@
         },
 
         exportAction: function () {
-            // export
+            if (!require) {
+                console.error('require not loaded!');
+            }
+            var selectedExporter = 'exporter-cocos2d';
             var self = this;
-            function doExport(basename, txtPath, imgPath) {
-                // build png
-                var imgData = self.atlasCanvas.export();
-                var canvas = imgData.canvas;
-                var pixelBuffer = imgData.buffer;
-                self.atlas.filename = basename + '.png';
-                exportCocos2d(self.atlas, function (text) {
-                    FIRE.saveText(text, basename + ".plist", txtPath);
-                    FIRE.savePng(canvas, basename, imgPath, pixelBuffer);
-                });
-            }
-
-            var name = 'atlas';
-            if (FIRE.isnw) {
-                FIRE.getSavePath(name + '.plist', 'Key_ExportAtlas', function (txtPath) {
-                    var pngPath = FIRE.setExtension(txtPath, '.png');
-                    var Path = require('path');
-                    var basename = Path.basename(txtPath, Path.extname(txtPath));
-                    
-                    doExport(basename, txtPath, pngPath);
-                    
-                    var nwgui = require('nw.gui');
-                    nwgui.Shell.showItemInFolder(txtPath);
-                });
-            }
-            else {
-                doExport(name, null, null);
-            }
-            
-            //console.time('encode base64');
-            //var pngDataURL = png.encode_base64();
-            //pngDataURL = 'data:image/png;base64,' + pngDataURL;
-            //console.timeEnd('encode base64');
-            
-            //var url2 = canvas.toDataURL("image/png");
-            //url2 = url2.slice('data:image/png;base64,'.length, 1000);
-            //console.log(pngDataURL.slice(0, 100));
-            //console.log(pngDataURL.length);
-            //console.log(pngDataURL.slice(pngDataURL.length - 100));
-            //console.log(pngDataURL);
-            //console.log(url2.slice(0, 100));
-            //console.log(url2.length);
-            //console.log(url2.slice(url2.length - 100));
-            //console.log(url2);
-            //console.log('decode64 pngDataURL ' + decode64(pngDataURL));
-            //console.log('decode64 url2 ' + decode64(url2));
+            require([selectedExporter], function (exporter) {
+                function doExport(dataName, dataPath, imgPath) {
+                    // build png
+                    var imgData = self.atlasCanvas.export();
+                    var canvas = imgData.canvas;
+                    var pixelBuffer = imgData.buffer;
+                    self.atlas.textureFileName = FIRE.Path.setExtension(dataName, '.png');
+                    exporter.exportData(self.atlas, function (text) {
+                        FIRE.saveText(text, dataName, dataPath);
+                        FIRE.savePng(canvas, self.atlas.textureFileName, imgPath, pixelBuffer);
+                    });
+                }
+                var dataName = exporter.fileName;
+                if (FIRE.isnw) {
+                    FIRE.getSavePath(dataName, 'Key_ExportAtlas', function (dataPath) {
+                        var pngPath = FIRE.Path.setExtension(dataPath, '.png');
+                        var Path = require('path');
+                        dataName = Path.basename(dataPath);
+                        
+                        doExport(dataName, dataPath, pngPath);
+                        
+                        var nwgui = require('nw.gui');
+                        nwgui.Shell.showItemInFolder(dataPath);
+                    });
+                }
+                else {
+                    doExport(dataName, null, null);
+                }
+            });
         },
 
         importAction: function ( event, files ) {

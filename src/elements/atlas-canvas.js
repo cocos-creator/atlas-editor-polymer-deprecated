@@ -131,6 +131,7 @@
                     var rect = new paper.Rectangle(self.rectSelectStartAt, cursorPos);
                     self.selectRect.position = rect.center;
                     self.selectRect.size = rect.size;
+                    self.selectRect.bringToFront();
 
                     self.doRectSelect(self.cameraLayer);
                 }
@@ -598,6 +599,14 @@
 
             event.preventDefault();
             event.stopPropagation();
+        },
+
+        _focusAction: function ( event ) {
+            // console.log("on focus");
+        },
+
+        _blurAction: function ( event ) {
+            // console.log("on blur");
         },
 
         _zoomChanged: function ( zoom ) {

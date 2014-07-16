@@ -2,11 +2,11 @@
     name="atlas-canvas" 
     constructor="AtlasCanvas"
     attributes="atlas customBackgroundColor backgroundColor elementBgColor elementSelectColor"
-    on-wheel="wheelAction"
-    on-dragenter="_dragEnterAction"
-    on-dragover="_dragOverAction"
-    on-dragleave="_dragLeaveAction"
-    on-drop="_dropAction"
+    on-wheel="{{wheelAction}}"
+    on-dragenter="{{_dragEnterAction}}"
+    on-dragover="{{_dragOverAction}}"
+    on-dragleave="{{_dragLeaveAction}}"
+    on-drop="{{_dropAction}}"
     >
 
 <template>
@@ -18,7 +18,13 @@
     }
 </style>
 
-<canvas id="canvas" tabindex="1"></canvas>
+<canvas 
+    id="canvas" 
+    tabindex="1"
+    on-focus="{{_focusAction}}"
+    on-blur="{{_blurAction}}"
+    >
+</canvas>
 </template>
 
 <script type="text/javascript" src="atlas-canvas.js"></script>

@@ -112,12 +112,6 @@
             tool.onMouseMove = function (event) {
                 _applyCursor(event);
                 hoverItem = event.item;
-
-                if ( self.debugText ) {
-                    // var trans = self.atlasLayer.globalMatrix.inverseTransform(event.point);
-                    var trans = self.atlasLayer.globalMatrix.transform(0,0);
-                    self.debugText.content = trans.toString() + ", " + event.point.toString();
-                }
             };
 
             tool.onMouseDrag = function (event) {
@@ -265,8 +259,12 @@
             canvasEL.height = height;
 
             // resize
+            var posFilter = Math.round;
             this.project.view.viewSize = [width, height];
-            this.sceneLayer.position = [width * 0.5, height * 0.5];
+            this.sceneLayer.position = [ 
+                posFilter(width * 0.5), 
+                posFilter(height * 0.5)
+            ];
 
             this.repaint();
         },
@@ -410,18 +408,24 @@
         },
 
         _initScene: function () {
+            var posFilter = Math.round;
+            var sizeFilter = Math.floor;
+
             this.atlasBGLayer = PaperUtils.createLayer();
             this.atlasBGLayer.position = [-this.atlas.width*0.5, -this.atlas.height*0.5];
             this.atlasLayer = PaperUtils.createLayer();
             this.atlasLayer.position = [-this.atlas.width*0.5, -this.atlas.height*0.5];
             this.atlasLayer.selectable = true;
-            this.atlasHandlerLayer = PaperUtils.createLayer();
-            this.atlasHandlerLayer.position = [-this.atlas.width*0.5, -this.atlas.height*0.5];
+            // this.atlasHandlerLayer = PaperUtils.createLayer();
+            // this.atlasHandlerLayer.position = [
+            //     -this.atlas.width*0.5, 
+            //     -this.atlas.height*0.5
+            // ];
 
             this.cameraLayer.addChildren ([
                 this.atlasBGLayer,
                 this.atlasLayer,
-                this.atlasHandlerLayer,
+                // this.atlasHandlerLayer,
             ]);
 
             // init atlas-bg-layer
@@ -437,16 +441,16 @@
                 this.checkerboardMask.insertAbove(this.checkerboard);
             }
 
-            // init debug text
-            this.fgLayer.activate();
-            if ( this.debugText === undefined ) {
-                var text = new paper.PointText(10,20);
-                text.justification = 'left';
-                text.fillColor = 'white';
-                text.fontSize = 16;
-                text.content = 'Hello World';
-                this.debugText = text;
-            }
+            // // init debug text
+            // this.fgLayer.activate();
+            // if ( this.debugText === undefined ) {
+            //     var text = new paper.PointText(10,20);
+            //     text.justification = 'left';
+            //     text.fillColor = 'white';
+            //     text.fontSize = 16;
+            //     text.content = 'Hello World';
+            //     this.debugText = text;
+            // }
 
             // create border rect
             this.bgLayer.activate();
@@ -508,19 +512,33 @@
 
                 // update outline
                 var outline = child.data.outline;
+                var outlineMask = child.data.outlineMask;
                 if (outline.visible) {
                     var outlineBounds = bgItem.bounds;
-                    outlineBounds = outlineBounds.expand(-outline.strokeWidth/this.zoom);
-                    // outlineBounds = outlineBounds.expand((-outline.strokeWidth + 2)/this.zoom);
-                    outline.position = [
-                        outlineBounds.center.x*this.zoom, 
-                        outlineBounds.center.y*this.zoom
-                    ];
-                    outline.size = [
-                        outlineBounds.width*this.zoom, 
-                        outlineBounds.height*this.zoom
-                    ];
+                    // outlineBounds = outlineBounds.expand(-outline.strokeWidth/this.zoom);
+
+                    var outlineTL = atlasLayerMatrix.transform(outlineBounds.topLeft);
+                    var outlineBR = atlasLayerMatrix.transform(outlineBounds.bottomRight);
+                    outlineTL.x = posFilter(outlineTL.x);
+                    outlineTL.y = posFilter(outlineTL.y);
+                    outlineBR.x = posFilter(outlineBR.x);
+                    outlineBR.y = posFilter(outlineBR.y);
+                    var outlineStrokeWidth = outline.strokeWidth;
+                    var outlineSize = new paper.Point(
+                        outlineBR.x-outlineTL.x, 
+                        outlineBR.y-outlineTL.y
+                    );
+                    var outlineCenter = new paper.Point( 
+                        outlineTL.x+outlineSize.x/2+outlineStrokeWidth/2, 
+                        outlineTL.y+outlineSize.y/2+outlineStrokeWidth/2
+                    );
+
+                    outline.position = outlineCenter;
+                    outline.size = outlineSize;
                     outline.strokeColor = PaperUtils.color( this.elementSelectColor );
+
+                    outlineMask.position = outlineCenter;
+                    outlineMask.size = outlineSize;
                 }
             }
 
@@ -583,16 +601,16 @@
         },
 
         _zoomChanged: function ( zoom ) {
-            this.atlasHandlerLayer.scale( 1.0/this.atlasHandlerLayer.globalMatrix.scaling.x,
-                                          1.0/this.atlasHandlerLayer.globalMatrix.scaling.y );
+            // this.atlasHandlerLayer.scale( 1.0/this.atlasHandlerLayer.globalMatrix.scaling.x,
+            //                               1.0/this.atlasHandlerLayer.globalMatrix.scaling.y );
             this.repaint();
         },
 
         _select: function ( items ) {
-            this.atlasHandlerLayer.activate();
             for ( var i = 0; i < items.length; ++i ) {
                 var item = items[i];
                 item.data.outline.visible = true;
+                item.data.outlineMask.visible = true;
                 item.fm_selected = true;
                 item.data.bgItem.bringToFront();
                 item.bringToFront();
@@ -604,6 +622,7 @@
             for ( var i = 0; i < items.length; ++i ) {
                 var item = items[i];
                 item.data.outline.visible = false;
+                item.data.outlineMask.visible = false;
                 item.fm_selected = false;
             }
             this.repaint();
@@ -627,7 +646,7 @@
             //
             this.atlasBGLayer.position = [-this.atlas.width*0.5, -this.atlas.height*0.5];
             this.atlasLayer.position = [-this.atlas.width*0.5, -this.atlas.height*0.5];
-            this.atlasHandlerLayer.position = [-this.atlas.width*0.5, -this.atlas.height*0.5];
+            // this.atlasHandlerLayer.position = [-this.atlas.width*0.5, -this.atlas.height*0.5];
 
             //
             if ( this.checkerboard !== undefined ) {
@@ -670,13 +689,21 @@
                     raster.data.bgItem = new paper.Shape.Rectangle(paper.Item.NO_INSERT);
                     raster.data.bgItem.insertBelow(raster);
 
+                    raster.data.outlineMask = new paper.Shape.Rectangle(paper.Item.NO_INSERT);
+                    raster.data.outlineMask.style = {
+                        strokeWidth: 1,
+                        strokeColor: new paper.Color(204/255, 204/255, 204/255, 1),
+                    };
+                    this.fgLayer.addChild(raster.data.outlineMask);
+                    raster.data.outlineMask.visible = false;
+
                     raster.data.outline = new paper.Shape.Rectangle(paper.Item.NO_INSERT);
                     raster.data.outline.style = {
-                        strokeWidth: 2,
+                        strokeWidth: 1,
                         strokeColor: PaperUtils.color( this.elementSelectColor ),
-                        dashArray: [4, 3],
+                        dashArray: [5, 4],
                     };
-                    this.atlasHandlerLayer.addChild(raster.data.outline);
+                    this.fgLayer.addChild(raster.data.outline);
                     raster.data.outline.visible = false;
                 }
             }

@@ -499,11 +499,11 @@
                     child.pivot = [-sprite.width * 0.5, -sprite.height * 0.5];
                     child.rotation = 0;
                 }
-                child.position = [sprite.x, sprite.y];
+                child.position = [posFilter(sprite.x), posFilter(sprite.y)];
 
                 // update rectangle
-                var left = sprite.x;
-                var top = sprite.y;
+                var left = child.position.x;
+                var top = child.position.y;
                 var w = sprite.rotatedWidth;
                 var h = sprite.rotatedHeight;
                 var bgItem = child.data.bgItem;
@@ -692,7 +692,7 @@
                 var raster = PaperUtils.createSpriteRaster(sprite);
                 raster.selectable = true;
                 raster.data.sprite = sprite;
-                raster.position = [sprite.x, sprite.y];
+                raster.position = [Math.round(sprite.x), Math.round(sprite.y)];
 
                 if ( !forExport ) {
                     raster.data.bgItem = new paper.Shape.Rectangle(paper.Item.NO_INSERT);

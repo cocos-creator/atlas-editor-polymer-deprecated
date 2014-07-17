@@ -149,6 +149,8 @@
             }
             this.atlas.sort();
             this.atlas.layout();
+
+            this.atlasCanvas.clearSelect();
         },
 
         atlasSizeChanged: function () {

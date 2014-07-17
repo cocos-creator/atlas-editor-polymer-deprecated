@@ -25,8 +25,6 @@
             this.project = paper.project;
             this.project.view.viewSize = viewSize; // to prevent canvas resizing during paper.setup
 
-            this.project.activate();
-
             // sceneLayer
             this.sceneLayer = this.project.activeLayer;
             this.sceneLayer.applyMatrix = false;
@@ -742,6 +740,7 @@
             }
             this.rebuildAtlas(true);
             // restore paper context
+            // if we have only one canvas, and only change paper context here, then we do not have to re-activate in other place.
             this.project.activate();
 
             //
@@ -749,11 +748,19 @@
             var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             var pixelBuffer = imageData.data;
 
-            //for (var i = 2, len = pixelBuffer.length; i < len; i += 4) {
-            //    if (pixelBuffer[i + 1] === 0) {
-            //        pixelBuffer[i] = 255;
-            //    }
-            //}
+            var fixTranparentBuildColor = this.atlas.customBuildColor && this.atlas.buildColor.a === 0;
+            if (fixTranparentBuildColor) {
+                var r8 = this.atlas.buildColor.r * 255;
+                var g8 = this.atlas.buildColor.g * 255;
+                var b8 = this.atlas.buildColor.b * 255;
+                for (var i = 0, len = pixelBuffer.length; i < len; i += 4) {
+                    if (pixelBuffer[i + 3] === 0) {
+                        pixelBuffer[i]     = r8;
+                        pixelBuffer[i + 1] = g8;
+                        pixelBuffer[i + 2] = b8;
+                    }
+                }
+            }
 
             pixelBuffer = Utils.applyBleed(this.atlas, pixelBuffer);   // 这里应该是一个导出前才进行的操作，否则对像素的更改有可能被paper重绘时覆盖
             

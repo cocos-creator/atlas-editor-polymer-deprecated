@@ -58,9 +58,12 @@
                     var imgData = self.atlasCanvas.export();
                     var canvas = imgData.canvas;
                     var pixelBuffer = imgData.buffer;
+                    // build data
                     self.atlas.textureFileName = FIRE.Path.setExtension(dataName, '.png');
                     exporter.exportData(self.atlas, function (text) {
+                        // save data
                         FIRE.saveText(text, dataName, dataPath);
+                        // save png
                         FIRE.savePng(canvas, self.atlas.textureFileName, imgPath, pixelBuffer);
                     });
                 }

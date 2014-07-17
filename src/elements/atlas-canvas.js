@@ -731,11 +731,17 @@
         },
 
         export: function () {
+            // setup canvas
             var canvas = document.createElement('canvas');
             paper.setup(canvas);
             paper.view.viewSize = [this.atlas.width, this.atlas.height];
+            // render canvas
+            if (this.atlas.customBuildColor) {
+                var bg = new paper.Shape.Rectangle(0, 0, this.atlas.width, this.atlas.height);
+                bg.fillColor = PaperUtils.color(this.atlas.buildColor);
+            }
             this.rebuildAtlas(true);
-
+            //
             var ctx = canvas.getContext('2d');
             var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             var pixelBuffer = imageData.data;

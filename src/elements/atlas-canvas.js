@@ -741,6 +741,9 @@
                 bg.fillColor = PaperUtils.color(this.atlas.buildColor);
             }
             this.rebuildAtlas(true);
+            // restore paper context
+            this.project.activate();
+
             //
             var ctx = canvas.getContext('2d');
             var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);

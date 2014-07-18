@@ -600,11 +600,28 @@
         },
 
         _focusAction: function ( event ) {
-            // console.log("on focus");
+            Mousetrap.bind(['command+backspace', 'ctrl+backspace'], function() {
+                for ( var i = 0; i < this.selection.length; ++i ) {
+                    this.atlas.remove(this.selection[i].data.sprite);
+                }
+
+                if ( this.atlas.autoSize ) {
+                    this.atlas.width = 128;
+                    this.atlas.height = 128;
+                    this.atlas.sort();
+                    this.atlas.layout();
+                }
+                this.selection = [];
+                this.rebuildAtlas(false);
+
+                // return false to prevent default browser behavior
+                // and stop event from bubbling
+                return false;
+            }.bind(this) );
         },
 
         _blurAction: function ( event ) {
-            // console.log("on blur");
+            Mousetrap.unbind(['command+backspace', 'ctrl+backspace']);
         },
 
         _zoomChanged: function ( zoom ) {
@@ -680,6 +697,7 @@
         // if not exporting, just draw atlas to current paper project
         rebuildAtlas: function (forExport) {
             if (!forExport) {
+                this.fgLayer.removeChildren();
                 this.atlasLayer.removeChildren();
                 this.atlasLayer.activate();
             }
@@ -716,6 +734,8 @@
             }
 
             if (!forExport) {
+                this.fgLayer.addChild(this.selectRect);
+                this.selectRect.bringToFront();
                 this.repaint();
             }
             else {

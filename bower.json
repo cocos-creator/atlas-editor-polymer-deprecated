@@ -21,6 +21,7 @@
     "fontawesome": "",
     "paper": "",
     "dustjs-linkedin": "",
-    "requirejs-text": ""
+    "requirejs-text": "",
+    "mousetrap": ""
   }
 }

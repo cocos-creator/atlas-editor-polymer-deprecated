@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#~0.3.4",
+    "web-animations-js": "web-animations/web-animations-js#master",
     "fontawesome": "",
     "paper": "",
     "dustjs-linkedin": "",

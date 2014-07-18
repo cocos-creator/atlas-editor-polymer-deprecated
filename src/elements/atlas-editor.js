@@ -52,6 +52,7 @@
             }
             var selectedExporter = 'exporter-cocos2d';
             var self = this;
+            console.log("start");
             require([selectedExporter], function (exporter) {
                 function doExport(dataName, dataPath, imgPath) {
                     // build png
@@ -64,7 +65,13 @@
                         // save data
                         FIRE.saveText(text, dataName, dataPath);
                         // save png
-                        FIRE.savePng(canvas, self.atlas.textureFileName, imgPath, pixelBuffer);
+                        FIRE.savePng( canvas, 
+                                      self.atlas.textureFileName, 
+                                      imgPath, 
+                                      pixelBuffer,
+                                      function () {
+                                          console.log("end");
+                                      } );
                     });
                 }
                 var dataName = exporter.fileName;

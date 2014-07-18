@@ -1,0 +1,87 @@
+<polymer-element 
+    name="loading-mask" 
+    constructor="LoadingMask"
+    >
+
+<template>
+
+<style>
+    .mask {
+        background: rgba(0,0,0,0.5);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 999;
+    }
+    .loading {
+        position: relative;
+        text-align: center;
+    }
+    .loading h2 {
+        color: #ccc;
+        border-radius: 6px;
+        margin: 0;
+        font: .8em verdana;
+        letter-spacing: .1em;
+    }
+    .loading span {
+        display: inline-block;
+        vertical-align: middle;
+        width: 5px;
+        height: 5px;
+        margin: 1px;
+        background: #007DB6;
+        border-radius: 5px;
+        -webkit-animation: loading 0.6s infinite alternate;
+    }
+    .loading span:nth-of-type(2) {
+        background: #008FB2;
+        -webkit-animation-delay: 0.1s;
+    }
+    .loading span:nth-of-type(3) {
+        background: #009B9E;
+        -webkit-animation-delay: 0.2s;
+    }
+    .loading span:nth-of-type(4) {
+        background: #00A77D;
+        -webkit-animation-delay: 0.3s;
+    }
+    .loading span:nth-of-type(5) {
+        background: #00B247;
+        -webkit-animation-delay: 0.4s;
+    }
+    .loading span:nth-of-type(6) {
+        background: #5AB027;
+        -webkit-animation-delay: 0.5s;
+    }
+    .loading span:nth-of-type(7) {
+        background: #A0B61E;
+        -webkit-animation-delay: 0.6s;
+    }
+    @-webkit-keyframes loading {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+</style>
+
+<div class="mask">
+    <div id="loading" class="loading">
+         <h2>Loading</h2>
+         <span></span>
+         <span></span>
+         <span></span>
+         <span></span>
+         <span></span>
+         <span></span>
+         <span></span>
+    </div>
+</div>
+</template>
+
+<script type="text/javascript" src="loading-mask.js"></script>
+
+</polymer-element> 

@@ -8,6 +8,7 @@ require.config({
         'text': 'ext/requirejs-text/text',
         // others
         'libpng': "bin/libpngWrapper",
+        'jszip': "ext/jszip/dist/jszip.min",
     },
 });
 
@@ -22,4 +23,10 @@ require([
 console.time('load png encoder');
 require(['libpng'], function () {
     console.timeEnd('load png encoder');
+
+    // pre-load jszip
+    console.time('load jszip');
+    require(['jszip'], function () {
+        console.timeEnd('load jszip');
+    });
 });

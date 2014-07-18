@@ -53,21 +53,38 @@
             var selectedExporter = 'exporter-cocos2d';
             var self = this;
             require([selectedExporter], function (exporter) {
+                // build png
+                var imgData = self.atlasCanvas.export();
+                var canvas = imgData.canvas;
+                var pixelBuffer = imgData.buffer;
+                var dataName = exporter.fileName;
+                self.atlas.textureFileName = FIRE.Path.setExtension(dataName, '.png');
+
                 function doExport(dataName, dataPath, imgPath) {
-                    // build png
-                    var imgData = self.atlasCanvas.export();
-                    var canvas = imgData.canvas;
-                    var pixelBuffer = imgData.buffer;
                     // build data
-                    self.atlas.textureFileName = FIRE.Path.setExtension(dataName, '.png');
                     exporter.exportData(self.atlas, function (text) {
-                        // save data
-                        FIRE.saveText(text, dataName, dataPath);
-                        // save png
-                        FIRE.savePng(canvas, self.atlas.textureFileName, imgPath, pixelBuffer);
+                        if (dataPath && imgPath) {
+                            // save data
+                            FIRE.saveText(text, dataName, dataPath);
+                            // save png
+                            FIRE.savePng(canvas, self.atlas.textureFileName, imgPath, pixelBuffer);
+                        }
+                        else {
+                            // save in zip
+                            require(['jszip'], function (JSZip) {
+                                console.time('zip');
+                                var zip = new JSZip();
+                                zip.file(dataName, text);
+                                FIRE.savePng(canvas, self.atlas.textureFileName, imgPath, pixelBuffer, zip, function () {
+                                    var zipname = FIRE.Path.setExtension(dataName, '.zip');
+                                    var blob = zip.generate({type:"blob"});
+                                    console.timeEnd('zip');
+                                    FIRE.downloadBlob(blob, zipname);
+                                });
+                            });
+                        }
                     });
                 }
-                var dataName = exporter.fileName;
                 if (FIRE.isnw) {
                     FIRE.getSavePath(dataName, 'Key_ExportAtlas', function (dataPath) {
                         var pngPath = FIRE.Path.setExtension(dataPath, '.png');

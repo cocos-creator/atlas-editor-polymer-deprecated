@@ -2,10 +2,12 @@
 require.config({
     baseUrl: "../",
     paths: {
-        // register require plugins
-        'text': 'ext/requirejs-text/text',
-        // register exporters
+        // exporters
         'exporter-cocos2d': 'exporters/cocos2d/index',
+        // require plugins
+        'text': 'ext/requirejs-text/text',
+        // others
+        'libpng': "bin/libpngWrapper",
     },
 });
 
@@ -15,3 +17,9 @@ require([
         ], function () {
             console.log('exporter(s) loaded');
         });
+
+// pre-load png encoder
+console.time('load png encoder');
+require(['libpng'], function () {
+    console.timeEnd('load png encoder');
+});

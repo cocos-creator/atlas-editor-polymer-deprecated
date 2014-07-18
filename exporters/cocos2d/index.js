@@ -1,5 +1,5 @@
 // export cocos2d data
-define(['text!exporters/cocos2d/template.plist'], function (template) {
+define(['text!exporters/cocos2d/template.plist', 'dust'], function (template) {
     var compile = null;
     var exportData = function (atlas, callback) {
         if (!compile) {

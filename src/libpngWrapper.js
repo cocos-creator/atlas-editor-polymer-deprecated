@@ -5,7 +5,7 @@
  *             http://www.w3.org/TR/PNG/
  */
 
-// setup global module parameters
+// setup global module parameters, must be defined before loading pngcrush
 var Module = {
 	'noInitialRun' : true,
 	'noFSInit' : true,
@@ -13,10 +13,9 @@ var Module = {
     'printErr': console.error,
 };
 
-// C definitions
-var NULL = 0;
-
-var libpng = function () {
+define(["3rd/pngcrush.min.fixed"], function () {
+    // C definitions
+    var NULL = 0;
     var init = function () {
         init = function () {};  // just init once
 
@@ -211,13 +210,13 @@ var libpng = function () {
 
     // the low-level interface
     var libpng = {
-
+        NULL: 0,
         FILTER_NONE:  0x08,
         FILTER_SUB:   0x10,
         FILTER_UP:    0x20,
         FILTER_AVG:   0x40,
         FILTER_PAETH: 0x80,
-        ALL_FILTERS: 0x08 | 0x10 | 0x20 | 0x40 | 0x80,
+        ALL_FILTERS:  0x08 | 0x10 | 0x20 | 0x40 | 0x80,
 
         init: init,
         // init and create a high-level interface for encoding
@@ -228,4 +227,4 @@ var libpng = function () {
     };
 
     return libpng;
-}();
+});

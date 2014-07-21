@@ -79,7 +79,9 @@
                                     var zipname = FIRE.Path.setExtension(dataName, '.zip');
                                     var blob = zip.generate({type:"blob"});
                                     console.timeEnd('zip');
-                                    FIRE.downloadBlob(blob, zipname);
+                                    require(['filesaver'], function () {
+                                        saveAs(blob, zipname);
+                                    });
                                 });
                             });
                         }

@@ -10,6 +10,7 @@ require.config({
         'libpng': "bin/libpngWrapper",
         'jszip': "ext/jszip/dist/jszip.min",
         'dust': "ext/dustjs-linkedin/dist/dust-full.min",
+        'filesaver': "ext/FileSaver/FileSaver",
     },
 });
 
@@ -29,5 +30,8 @@ require(['libpng'], function () {
     console.time('load jszip');
     require(['jszip'], function () {
         console.timeEnd('load jszip');
+
+        // pre-load filesaver
+        require(['filesaver']);
     });
 });

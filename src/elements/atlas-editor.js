@@ -52,57 +52,74 @@
             }
             var selectedExporter = 'exporter-cocos2d';
             var self = this;
-            require([selectedExporter], function (exporter) {
-                // build png
-                var imgData = self.atlasCanvas.export();
-                var canvas = imgData.canvas;
-                var pixelBuffer = imgData.buffer;
-                var dataName = exporter.fileName;
-                self.atlas.textureFileName = FIRE.Path.setExtension(dataName, '.png');
 
-                function doExport(dataName, dataPath, imgPath) {
-                    // build data
-                    exporter.exportData(self.atlas, function (text) {
-                        if (dataPath && imgPath) {
-                            // save data
-                            FIRE.saveText(text, dataName, dataPath);
-                            // save png
-                            FIRE.savePng(canvas, self.atlas.textureFileName, imgPath, pixelBuffer);
-                        }
-                        else {
-                            // save in zip
-                            require(['jszip'], function (JSZip) {
-                                console.time('zip');
-                                var zip = new JSZip();
-                                zip.file(dataName, text);
-                                FIRE.savePng(canvas, self.atlas.textureFileName, imgPath, pixelBuffer, zip, function () {
-                                    var zipname = FIRE.Path.setExtension(dataName, '.zip');
-                                    var blob = zip.generate({type:"blob"});
-                                    console.timeEnd('zip');
-                                    require(['filesaver'], function () {
-                                        saveAs(blob, zipname);
+            var loadingMask = document.body.querySelector("loading-mask");
+            loadingMask.show();
+
+            window.setTimeout (
+                function () {
+                    require([selectedExporter], function (exporter) {
+                        // build png
+                        var imgData = self.atlasCanvas.export();
+                        var canvas = imgData.canvas;
+                        var pixelBuffer = imgData.buffer;
+                        var dataName = exporter.fileName;
+                        self.atlas.textureFileName = FIRE.Path.setExtension(dataName, '.png');
+
+                        function doExport(dataName, dataPath, imgPath) {
+                            // build data
+                            exporter.exportData(self.atlas, function (text) {
+                                if (dataPath && imgPath) {
+                                    // save data
+                                    FIRE.saveText(text, dataName, dataPath);
+                                    // save png
+                                    FIRE.savePng(canvas,
+                                                 self.atlas.textureFileName,
+                                                 imgPath,
+                                                 pixelBuffer,
+                                                 null,
+                                                 function () {
+                                                     loadingMask.hide();
+                                                 });
+                                }
+                                else {
+                                    // save in zip
+                                    require(['jszip'], function (JSZip) {
+                                        console.time('zip');
+                                        var zip = new JSZip();
+                                        zip.file(dataName, text);
+                                        FIRE.savePng(canvas, self.atlas.textureFileName, imgPath, pixelBuffer, zip, function () {
+                                            var zipname = FIRE.Path.setExtension(dataName, '.zip');
+                                            var blob = zip.generate({ type: "blob" });
+                                            console.timeEnd('zip');
+                                            require(['filesaver'], function () {
+                                                saveAs(blob, zipname);
+                                                loadingMask.hide();
+                                            });
+                                        });
                                     });
-                                });
+                                }
                             });
                         }
+                        if (FIRE.isnw) {
+                            FIRE.getSavePath(dataName, 'Key_ExportAtlas', function (dataPath) {
+                                var pngPath = FIRE.Path.setExtension(dataPath, '.png');
+                                var Path = require('path');
+                                dataName = Path.basename(dataPath);
+                                
+                                doExport(dataName, dataPath, pngPath);
+                                
+                                var nwgui = require('nw.gui');
+                                nwgui.Shell.showItemInFolder(dataPath);
+                            });
+                        }
+                        else {
+                            doExport(dataName, null, null);
+                        }
                     });
-                }
-                if (FIRE.isnw) {
-                    FIRE.getSavePath(dataName, 'Key_ExportAtlas', function (dataPath) {
-                        var pngPath = FIRE.Path.setExtension(dataPath, '.png');
-                        var Path = require('path');
-                        dataName = Path.basename(dataPath);
-                        
-                        doExport(dataName, dataPath, pngPath);
-                        
-                        var nwgui = require('nw.gui');
-                        nwgui.Shell.showItemInFolder(dataPath);
-                    });
-                }
-                else {
-                    doExport(dataName, null, null);
-                }
-            });
+                },
+                500
+            );
         },
 
         importAction: function ( event, files ) {

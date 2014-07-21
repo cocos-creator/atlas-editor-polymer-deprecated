@@ -23,6 +23,8 @@
     "paper": "",
     "dustjs-linkedin": "",
     "requirejs-text": "",
-    "mousetrap": ""
+    "mousetrap": "",
+    "jszip": "Stuk/jszip#~2.3.0",
+    "FileSaver": "fireball-x/FileSaver.js"
   }
 }

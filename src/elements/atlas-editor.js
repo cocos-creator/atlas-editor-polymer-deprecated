@@ -52,45 +52,53 @@
             }
             var selectedExporter = 'exporter-cocos2d';
             var self = this;
-            console.log("start");
-            require([selectedExporter], function (exporter) {
-                function doExport(dataName, dataPath, imgPath) {
-                    // build png
-                    var imgData = self.atlasCanvas.export();
-                    var canvas = imgData.canvas;
-                    var pixelBuffer = imgData.buffer;
-                    // build data
-                    self.atlas.textureFileName = FIRE.Path.setExtension(dataName, '.png');
-                    exporter.exportData(self.atlas, function (text) {
-                        // save data
-                        FIRE.saveText(text, dataName, dataPath);
-                        // save png
-                        FIRE.savePng( canvas, 
-                                      self.atlas.textureFileName, 
-                                      imgPath, 
-                                      pixelBuffer,
-                                      function () {
-                                          console.log("end");
-                                      } );
+
+            var loadingMask = document.body.querySelector("loading-mask");
+            loadingMask.show();
+
+            window.setTimeout (
+                function () {
+                    require([selectedExporter], function (exporter) {
+                        function doExport(dataName, dataPath, imgPath) {
+                            // build png
+                            var imgData = self.atlasCanvas.export();
+                            var canvas = imgData.canvas;
+                            var pixelBuffer = imgData.buffer;
+                            // build data
+                            self.atlas.textureFileName = FIRE.Path.setExtension(dataName, '.png');
+                            exporter.exportData(self.atlas, function (text) {
+                                // save data
+                                FIRE.saveText(text, dataName, dataPath);
+                                // save png
+                                FIRE.savePng( canvas, 
+                                              self.atlas.textureFileName, 
+                                              imgPath, 
+                                              pixelBuffer,
+                                              function () {
+                                                  loadingMask.hide();
+                                              } );
+                            });
+                        }
+                        var dataName = exporter.fileName;
+                        if (FIRE.isnw) {
+                            FIRE.getSavePath(dataName, 'Key_ExportAtlas', function (dataPath) {
+                                var pngPath = FIRE.Path.setExtension(dataPath, '.png');
+                                var Path = require('path');
+                                dataName = Path.basename(dataPath);
+                                
+                                doExport(dataName, dataPath, pngPath);
+                                
+                                var nwgui = require('nw.gui');
+                                nwgui.Shell.showItemInFolder(dataPath);
+                            });
+                        }
+                        else {
+                            doExport(dataName, null, null);
+                        }
                     });
-                }
-                var dataName = exporter.fileName;
-                if (FIRE.isnw) {
-                    FIRE.getSavePath(dataName, 'Key_ExportAtlas', function (dataPath) {
-                        var pngPath = FIRE.Path.setExtension(dataPath, '.png');
-                        var Path = require('path');
-                        dataName = Path.basename(dataPath);
-                        
-                        doExport(dataName, dataPath, pngPath);
-                        
-                        var nwgui = require('nw.gui');
-                        nwgui.Shell.showItemInFolder(dataPath);
-                    });
-                }
-                else {
-                    doExport(dataName, null, null);
-                }
-            });
+                },
+                500
+            );
         },
 
         importAction: function ( event, files ) {

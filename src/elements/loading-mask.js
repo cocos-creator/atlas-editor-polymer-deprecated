@@ -14,24 +14,22 @@
         },
 
         show: function () {
-            console.log("yes");
-            this.style.display = "inline"; 
             document.timeline.play(
                 new AnimationGroup ([
-                    new Animation(this, [
-                                    {fading: true, display: "inline"}, 
-                                    {fading: false}, 
-                                  ], {
-                                      duration: 500,
-                                      fill: 'both'
-                                  }),
                     new Animation(this.$.mask, [
                                     {opacity: "0.0"}, 
                                     {opacity: "1.0"}
                                   ], {
                                       duration: 500,
                                       fill: 'both'
-                                  })
+                                  }),
+                    new Animation(this, [
+                                    {fading: true, display: "inline"}, 
+                                    {fading: false, display: "inline"}, 
+                                  ], {
+                                      duration: 500,
+                                      fill: 'both'
+                                  }),
                 ]) 
             );
 

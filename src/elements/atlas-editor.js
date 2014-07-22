@@ -47,8 +47,8 @@
         },
 
         exportAction: function () {
-            if (!require) {
-                console.error('require not loaded!');
+            if (!requirejs) {
+                console.error('requirejs not loaded!');
             }
             var selectedExporter = 'exporter-cocos2d';
             var self = this;
@@ -58,7 +58,7 @@
 
             window.setTimeout (
                 function () {
-                    require([selectedExporter], function (exporter) {
+                    requirejs([selectedExporter], function (exporter) {
                         // build png
                         var imgData = self.atlasCanvas.export();
                         var canvas = imgData.canvas;
@@ -84,7 +84,7 @@
                                 }
                                 else {
                                     // save in zip
-                                    require(['jszip'], function (JSZip) {
+                                    requirejs(['jszip'], function (JSZip) {
                                         console.time('zip');
                                         var zip = new JSZip();
                                         zip.file(dataName, text);
@@ -92,10 +92,10 @@
                                             var zipname = FIRE.Path.setExtension(dataName, '.zip');
                                             var blob = zip.generate({ type: "blob" });
                                             console.timeEnd('zip');
-                                            require(['filesaver'], function () {
+                                            //requirejs(['filesaver'], function () {
                                                 saveAs(blob, zipname);
                                                 loadingMask.hide();
-                                            });
+                                            //});
                                         });
                                     });
                                 }

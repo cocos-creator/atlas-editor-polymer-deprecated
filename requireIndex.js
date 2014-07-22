@@ -1,6 +1,6 @@
 ﻿// 
-require.config({
-    baseUrl: "../",
+requirejs.config({
+    //baseUrl: "../",
     paths: {
         // exporters
         'exporter-cocos2d': 'exporters/cocos2d/index',
@@ -15,23 +15,25 @@ require.config({
 });
 
 // pre-load exporters
-require([
+requirejs([
             'exporter-cocos2d',
         ], function () {
             console.log('exporter(s) loaded');
+        }, function (error) {
+            console.log(error);
         });
 
 // pre-load png encoder
 console.time('load png encoder');
-require(['libpng'], function () {
+requirejs(['libpng'], function () {
     console.timeEnd('load png encoder');
 
     // pre-load jszip
     console.time('load jszip');
-    require(['jszip'], function () {
+    requirejs(['jszip'], function () {
         console.timeEnd('load jszip');
 
         // pre-load filesaver
-        require(['filesaver']);
+        requirejs(['filesaver']);
     });
 });

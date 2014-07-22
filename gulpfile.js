@@ -7,6 +7,7 @@ var stylish = require('jshint-stylish');
 var uglify = require('gulp-uglify');
 var stylus = require('gulp-stylus');
 var vulcanize = require('gulp-vulcanize');
+var Q = require('q');
 
 var paths = {
     ext_core: [ 
@@ -39,9 +40,17 @@ gulp.task('cp-core', function() {
     ;
 });
 gulp.task('cp-editor-ui', function() {
-    return gulp.src(paths.ext_editor_ui, {base: '../editor-ui-polymer/bin/'})
-    .pipe(gulp.dest('ext/fire-editor-ui'))
-    ;
+    var deferred = Q.defer();
+
+    // deferred 1 second to prevent copy editor-ui.html while it is in the building phase
+    setTimeout(function () {
+        gulp.src(paths.ext_editor_ui, {base: '../editor-ui-polymer/bin/'})
+        .pipe(gulp.dest('ext/fire-editor-ui'))
+        ;
+        deferred.resolve();
+    }, 1000);
+
+    return deferred.promise;
 });
 gulp.task('cp-img', function() {
     return gulp.src(paths.img)

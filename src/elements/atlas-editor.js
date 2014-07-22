@@ -92,10 +92,10 @@
                                             var zipname = FIRE.Path.setExtension(dataName, '.zip');
                                             var blob = zip.generate({ type: "blob" });
                                             console.timeEnd('zip');
-                                            //requirejs(['filesaver'], function () {
+                                            requirejs(['filesaver'], function () {
                                                 saveAs(blob, zipname);
                                                 loadingMask.hide();
-                                            //});
+                                            });
                                         });
                                     });
                                 }

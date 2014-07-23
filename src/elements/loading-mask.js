@@ -3,10 +3,10 @@
         fading: false,
 
         attached: function () {
-            this.$.loading.style.top = (this.parentNode.clientHeight - this.clientHeight)/2;
+            this.$.loading.style.top = (this.clientHeight-this.$.loading.clientHeight)/2;
 
             window.addEventListener('resize', function() {
-                this.$.loading.style.top = (this.parentNode.clientHeight - this.clientHeight)/2;
+                this.$.loading.style.top = (this.clientHeight-this.$.loading.clientHeight)/2;
             }.bind(this), false);
 
             this.style.display = "none"; 

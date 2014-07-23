@@ -53,7 +53,7 @@
             var selectedExporter = 'exporter-cocos2d';
             var self = this;
 
-            var loadingMask = document.body.querySelector("loading-mask");
+            var loadingMask = this.$.loadingMask;
             loadingMask.show();
 
             function onExporterLoaded (exporter) {

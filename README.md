@@ -1,13 +1,15 @@
 atlas-editor
 =========
 
-```bash
+### bash ###
+```
 bower update
 npm update
 gulp
 ```
 
-```how to build 3rd/bluebird.js
+### how to build 3rd/bluebird.js ###
+```
 bower install
 cd ext/bluebird
 npm install

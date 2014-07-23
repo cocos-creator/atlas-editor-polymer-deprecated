@@ -1,5 +1,12 @@
 (function () {
     Polymer('atlas-canvas', {
+        minZoom: 0.1,
+        maxZoom: 8.0,
+
+        observe: {
+            'zoom': 'updateZoom', 
+        },
+
         created: function () {
             this.atlas = new FIRE.Atlas(); 
             this.zoom = 1.0;
@@ -221,24 +228,21 @@
             var zoom = this.zoom;
             if( event.deltaY < 0 ) {
                 zoom += 0.1;
-                zoom = Math.min(zoom, 8);
+                zoom = Math.min(zoom, this.maxZoom);
             }
             else {
                 zoom -= 0.1;
-                zoom = Math.max(zoom, 0.1);
+                zoom = Math.max(zoom, this.minZoom);
             }
-            this.setZoom(zoom);
+            this.zoom = parseFloat(zoom.toFixed(2));
 
             event.stopPropagation();
         },
 
-        setZoom: function ( zoom ) {
-            if ( this.zoom != zoom ) {
-                this.zoom = zoom;
-                this.sceneLayer.scaling = [zoom, zoom];
-                this.project.view.update();
-                this._zoomChanged(zoom);
-            }
+        updateZoom: function () {
+            this.sceneLayer.scaling = [this.zoom, this.zoom];
+            this.project.view.update();
+            this._zoomChanged(this.zoom);
         },
 
         setPos: function ( x, y ) {
@@ -248,6 +252,12 @@
         setSmoothCanvas: function ( smoothCanvas ) {
             var canvasEL = this.$.canvas;
             canvasEL.getContext('2d').imageSmoothingEnabled = smoothCanvas;
+            this.repaint();
+        },
+
+        resetCamera: function () {
+            this.zoom = 1.0;
+            this.setPos(0,0);
             this.repaint();
         },
 
@@ -689,7 +699,7 @@
             // this.border.size = borderRect.size;
             // this.border.position = [(borderRect.size.width-borderWidth)*0.5,(borderRect.size.height-borderWidth)*0.5];
 
-            this.setZoom(1.0);
+            this.zoom = 1.0;
             this.setPos(0,0);
             this.repaint();
         },

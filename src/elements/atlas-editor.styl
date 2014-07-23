@@ -1,48 +1,51 @@
 right-sidebar-width = 320px
 left-sidebar-width = 48px
 
-.workspace {
-    background: url(../img/bg-linen.jpg) 50% top
-    height: 100%
-    min-height: 100%
-    max-height: 100%
-    overflow: hidden
-    margin-right: right-sidebar-width
-    margin-left: left-sidebar-width
+:host {
+    display: block
+
+    .workspace {
+        background: url(../img/bg-linen.jpg) 50% top
+        height: 100%
+        min-height: 100%
+        max-height: 100%
+        overflow: hidden
+        margin-right: right-sidebar-width
+        margin-left: left-sidebar-width
+    }
+
+    .left.sidebar {
+        position: fixed
+        width: left-sidebar-width
+        height: 100%
+        top: 0
+        left: 0
+        z-index: 100
+        box-shadow: 2px 0 3px 0 rgba(0,0,0,0.2)
+
+        background-color: #333
+        border: 1px solid #000
+        color: white
+        padding: 10px;
+    }
+
+    .right.sidebar {
+        position: fixed
+        width: right-sidebar-width
+        height: 100%
+        top: 0
+        right: 0
+        z-index: 100
+        box-shadow: -2px 0 3px 0 rgba(0,0,0,0.2)
+
+        background-color: #171717
+        border-top: 1px solid #000
+        color: white
+    }
+
+    span.space {
+        width: 5px;
+        height: 5px;
+        display: block;
+    }
 }
-
-.left.sidebar {
-    position: fixed
-    width: left-sidebar-width
-    height: 100%
-    top: 0
-    left: 0
-    z-index: 100
-    box-shadow: 2px 0 3px 0 rgba(0,0,0,0.2)
-
-    background-color: #333
-    border: 1px solid #000
-    color: white
-    padding: 10px;
-}
-
-.right.sidebar {
-    position: fixed
-    width: right-sidebar-width
-    height: 100%
-    top: 0
-    right: 0
-    z-index: 100
-    box-shadow: -2px 0 3px 0 rgba(0,0,0,0.2)
-
-    background-color: #171717
-    border-top: 1px solid #000
-    color: white
-}
-
-span.space {
-    width: 5px;
-    height: 5px;
-    display: block;
-}
-

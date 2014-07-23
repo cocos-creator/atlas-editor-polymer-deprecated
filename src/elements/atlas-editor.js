@@ -54,6 +54,7 @@
             var minLoadingTime = 800;
             var self = this;
 
+            var loadingMask = this.$.loadingMask;
             function doExport (exporter, dataName, dataPath) {
                 dataName = dataName || exporter.fileName;
                 var imgPath = dataPath && FIRE.Path.setExtension(dataPath, '.png');
@@ -180,7 +181,7 @@
                 var img = new Image();
                 img.classList.add('atlas-item');
                 img.onload = imgOnLoad.bind(this);
-                img.src = event.target.result;  // 这里的dataURL是原始数据，但Image填充到画布上后，透明像素的部分会变成黑色。
+                img.src = event.target.result;  // 这里的dataURL是原始数据，但Image填充到画布上后，透明像素的部分会变成黑色
             };
 
             var onloadBinded = onload.bind(this);

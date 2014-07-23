@@ -51,36 +51,35 @@
                 console.error('requirejs not loaded!');
             }
             var selectedExporter = 'exporter-cocos2d';
+            var minLoadingTime = 800;
             var self = this;
 
-            var loadingMask = document.body.querySelector("loading-mask");
-            loadingMask.show();
+            function doExport (exporter, dataName, dataPath) {
+                dataName = dataName || exporter.fileName;
+                var imgPath = dataPath && FIRE.Path.setExtension(dataPath, '.png');
 
-            function onExporterLoaded (exporter) {
                 // build png
                 var imgData = self.atlasCanvas.export();
                 var canvas = imgData.canvas;
                 var pixelBuffer = imgData.buffer;
-                var dataName = exporter.fileName;
                 self.atlas.textureFileName = FIRE.Path.setExtension(dataName, '.png');
 
-                function doExport(dataName, dataPath, imgPath) {
-                    // build data
+                // build data
+                return new Promise(function (resolve, reject) {
                     exporter.exportData(self.atlas, function (text) {
                         if (dataPath && imgPath) {
                             // save data
                             FIRE.saveText(text, dataName, dataPath);
                             // save png
                             FIRE.savePng(canvas,
-                                            self.atlas.textureFileName,
-                                            imgPath,
-                                            pixelBuffer,
-                                            null,
-                                            function () {
-                                                loadingMask.hide();
-                                                var nwgui = require('nw.gui');
-                                                nwgui.Shell.showItemInFolder(dataPath);
-                                            });
+                                         self.atlas.textureFileName,
+                                         imgPath,
+                                         pixelBuffer,
+                                         null,
+                                         function () {
+                                             loadingMask.hide();
+                                             resolve();
+                                         });
                         }
                         else {
                             // save in zip
@@ -93,38 +92,57 @@
                                     var blob = zip.generate({ type: "blob" });
                                     console.timeEnd('zip');
                                     requirejs(['filesaver'], function () {
-                                        saveAs(blob, zipname);
-                                        loadingMask.hide();
+                                        resolve(function () {
+                                            saveAs(blob, zipname);
+                                        });
                                     });
                                 });
                             });
                         }
                     });
-                }
-                if (FIRE.isnw) {
+                });
+            }
+            
+            var loadingMask = document.body.querySelector("loading-mask");
+            loadingMask.show();
+
+            if (FIRE.isnw) {
+                requireAsync(selectedExporter)
+                .then(function (exporter) {
                     loadingMask.hide(); // here have to hide the mask temporary,
                                         // because it seems like that in node-webkit, we could not get any callback while users canceled the file dialog
-                    FIRE.getSavePath(dataName, 'Key_ExportAtlas', function (dataPath) {
-                        loadingMask.show();
-                        var pngPath = FIRE.Path.setExtension(dataPath, '.png');
-                        var Path = require('path');
-                        dataName = Path.basename(dataPath);
-                                
-                        doExport(dataName, dataPath, pngPath);
+                    return new Promise(function (resolve, reject) {
+                        FIRE.getSavePath(exporter.fileName, 'Key_ExportAtlas', function (dataPath) {
+                            loadingMask.show();
+
+                            var Path = require('path');
+                            var dataName = Path.basename(dataPath);
+                            Promise.all([
+                                Promise.delay(minLoadingTime),
+                                doExport(exporter, dataName, dataPath)
+                            ]).then(function () {
+                                resolve(dataPath);
+                            });
+                        });
                     });
-
-                }
-                else {
-                    doExport(dataName, null, null);
-                }
+                }).then(function (dataPath) {
+                    var nwgui = require('nw.gui');
+                    nwgui.Shell.showItemInFolder(dataPath);
+                    // finished
+                    loadingMask.hide();
+                });
             }
-
-            window.setTimeout (
-                function () {
-                    requirejs([selectedExporter], onExporterLoaded);
-                },
-                500
-            );  // TODO: make require async
+            else {
+                var exportPromise = requireAsync(selectedExporter).then(doExport);
+                Promise.all([Promise.delay(minLoadingTime), exportPromise])
+                .spread(function (delay, doDownload) {
+                    if (doDownload) {
+                        doDownload();
+                    }
+                    // finished
+                    loadingMask.hide();
+                });
+            }
         },
 
         importAction: function ( event, files ) {

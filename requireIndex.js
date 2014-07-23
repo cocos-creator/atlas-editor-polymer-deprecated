@@ -1,4 +1,4 @@
-﻿// 
+﻿// setup requirejs
 requirejs.config({
     //baseUrl: "../",
     paths: {
@@ -14,26 +14,45 @@ requirejs.config({
     },
 });
 
-// pre-load exporters
-requirejs([
-            'exporter-cocos2d',
-        ], function () {
-            console.log('exporter(s) loaded');
-        }, function (error) {
-            console.log(error);
-        });
-
-// pre-load png encoder
-console.time('load png encoder');
-requirejs(['libpng'], function () {
-    console.timeEnd('load png encoder');
-
-    // pre-load jszip
-    console.time('load jszip');
-    requirejs(['jszip'], function () {
-        console.timeEnd('load jszip');
-
-        // pre-load filesaver
-        requirejs(['filesaver']);
+// promise wrapper
+var requireAsync = function () {
+    var modules = Array.prototype.slice.call(arguments);
+    var logTime = false;
+    if (modules.length > 1 && typeof modules[modules.length - 1] === 'boolean') {
+        logTime = modules[modules.length - 1];
+        modules.pop();
+    }
+    var timerTag = 'load ' + modules;
+    return new Promise(function (resolve, reject) {
+        if (logTime) {
+            console.time(timerTag);
+        }
+        //console.log('start ' + timerTag);
+        requirejs(modules, 
+                  logTime ?
+                  function () {
+                      console.timeEnd(timerTag);
+                      resolve.apply(this, arguments);
+                  }
+                  : resolve,
+                  function (error) {
+                      console.error(error);
+                      reject(error);
+                  });
     });
+}
+
+// pre-load exporters
+requireAsync(
+    'exporter-cocos2d'
+    //, true
+).then(function () {
+    console.log('exporter(s) loaded');
 });
+
+// pre-load modules
+Promise.all([
+    requireAsync('libpng', true),
+    requireAsync('jszip', true),
+    requireAsync('filesaver', true)
+]);

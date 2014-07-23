@@ -26,5 +26,8 @@
     "mousetrap": "",
     "jszip": "Stuk/jszip#~2.3.0",
     "FileSaver": "fireball-x/FileSaver.js"
+  },
+  "devDependencies": {
+    "bluebird": "~2.2.2"
   }
 }

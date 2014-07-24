@@ -54,59 +54,64 @@
             var minLoadingTime = 800;
             var self = this;
 
-            var loadingMask = this.$.loadingMask;
-            function doExport (exporter, dataName, dataPath) {
-                dataName = dataName || exporter.fileName;
-                var imgPath = dataPath && FIRE.Path.setExtension(dataPath, '.png');
-
-                // build png
-                var imgData = self.atlasCanvas.export();
-                var canvas = imgData.canvas;
-                var pixelBuffer = imgData.buffer;
-                self.atlas.textureFileName = FIRE.Path.setExtension(dataName, '.png');
-
-                // build data
+            function buildPng (useZip) {
                 return new Promise(function (resolve, reject) {
-                    exporter.exportData(self.atlas, function (text) {
-                        if (dataPath && imgPath) {
-                            // save data
-                            FIRE.saveText(text, dataName, dataPath);
-                            // save png
-                            FIRE.savePng(canvas,
-                                         self.atlas.textureFileName,
-                                         imgPath,
-                                         pixelBuffer,
-                                         null,
-                                         function () {
-                                             loadingMask.hide();
-                                             resolve();
-                                         });
-                        }
-                        else {
-                            // save in zip
-                            requirejs(['jszip'], function (JSZip) {
-                                console.time('zip');
-                                var zip = new JSZip();
-                                zip.file(dataName, text);
-                                FIRE.savePng(canvas, self.atlas.textureFileName, imgPath, pixelBuffer, zip, function () {
-                                    var zipname = FIRE.Path.setExtension(dataName, '.zip');
-                                    var blob = zip.generate({ type: "blob" });
-                                    console.timeEnd('zip');
-                                    requirejs(['filesaver'], function () {
-                                        resolve(function () {
-                                            saveAs(blob, zipname);
-                                        });
-                                    });
-                                });
-                            });
-                        }
-                    });
+                    var imgData = self.atlasCanvas.export();
+                    var canvas = imgData.canvas;
+                    var pixelBuffer = imgData.buffer;
+                    // save png
+                    FIRE.buildPng(canvas,
+                                  self.atlas.textureFileName,
+                                  pixelBuffer,
+                                  useZip,
+                                  function (data) {
+                                      resolve(data);
+                                  });
                 });
             }
             
-            var loadingMask = document.body.querySelector("loading-mask");
+            function exportFiles (exporter, dataName, dataPath, buildPngPromise) {
+                return new Promise(function (resolve, reject) {
+                    exporter.exportData(self.atlas, function (text) {
+                        // save data
+                        FIRE.saveText(text, dataName, dataPath);
+                        buildPngPromise.then(function (data) {
+                            var imgPath = dataPath && FIRE.Path.setExtension(dataPath, '.png');
+                            FIRE.savePng(data, self.atlas.textureFileName, imgPath, null);
+                            resolve();
+                        });
+                    });
+                });
+            }
+
+            function exportZip (exporter, dataName, buildPngPromise, requireZip) {
+                return new Promise(function (resolve, reject) {
+                    exporter.exportData(self.atlas, function (text) {
+                        Promise.all([ buildPngPromise, requireZip ])
+                        .spread(function (data, JSZip) {
+                            // create
+                            //console.time('zip');
+                            var zip = new JSZip();
+
+                            zip.file(dataName, text);
+                            FIRE.savePng(data, self.atlas.textureFileName, null, zip);
+
+                            var blob = zip.generate({ type: "blob" });
+                            //console.timeEnd('zip');
+                            resolve(blob);
+                        })
+                    });
+                });
+            }
+
+            var loadingMask = this.$.loadingMask;
             loadingMask.show();
 
+            var maskFadeInDuration = 500;   // IE压缩png时会挂起浏览器，所以需要等mask渲染出来
+            var buildPngPromise = Promise.delay(maskFadeInDuration).then(function () {
+                var useZip = !FIRE.isnw;
+                return buildPng(useZip);
+            });
             if (FIRE.isnw) {
                 requireAsync(selectedExporter)
                 .then(function (exporter) {
@@ -118,9 +123,10 @@
 
                             var Path = require('path');
                             var dataName = Path.basename(dataPath);
+                            self.atlas.textureFileName = FIRE.Path.setExtension(dataName, '.png');
                             Promise.all([
                                 Promise.delay(minLoadingTime),
-                                doExport(exporter, dataName, dataPath)
+                                exportFiles(exporter, dataName, dataPath, buildPngPromise)
                             ]).then(function () {
                                 resolve(dataPath);
                             });
@@ -134,12 +140,17 @@
                 });
             }
             else {
-                var exportPromise = requireAsync(selectedExporter).then(doExport);
-                Promise.all([Promise.delay(minLoadingTime), exportPromise])
-                .spread(function (delay, doDownload) {
-                    if (doDownload) {
-                        doDownload();
-                    }
+                var requireSaver = requireAsync('filesaver');
+                var requireZip = requireAsync('jszip');
+                var exportPromise = requireAsync(selectedExporter)
+                                    .then(function (exporter) {
+                                        self.atlas.textureFileName = FIRE.Path.setExtension(exporter.fileName, '.png');
+                                        return exportZip(exporter, exporter.fileName, buildPngPromise, requireZip);
+                                    });
+                Promise.all([exportPromise, requireSaver, Promise.delay(minLoadingTime)])
+                .spread(function(blob) {
+                    var zipname = FIRE.Path.setExtension(self.atlas.textureFileName, '.zip');
+                    saveAs(blob, zipname);
                     // finished
                     loadingMask.hide();
                 });

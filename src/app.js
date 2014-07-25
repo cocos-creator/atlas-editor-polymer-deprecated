@@ -37,7 +37,7 @@ if ( FIRE.isnw ) {
     var nwgui = require('nw.gui');
     var nativeWin = nwgui.Window.get();
 
-    if (process.platform === 'darwin') {
+    if (FIRE.isdarwin) {
         var nativeMenuBar = new nwgui.Menu({ type: "menubar" });
         nativeMenuBar.createMacBuiltin("Atlas Editor");
         nativeWin.menu = nativeMenuBar;

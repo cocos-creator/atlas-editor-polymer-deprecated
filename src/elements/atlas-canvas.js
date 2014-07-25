@@ -612,7 +612,7 @@
         _focusAction: function ( event ) {
             if (!this.deleteKeys) {
                 this.deleteKeys = ['command+backspace', 'ctrl+backspace'];
-                if (process.platform !== 'darwin') {
+                if (!FIRE.isdarwin) {
                     this.deleteKeys.push('del');
                 }
             }

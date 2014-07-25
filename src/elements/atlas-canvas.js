@@ -610,7 +610,13 @@
         },
 
         _focusAction: function ( event ) {
-            Mousetrap.bind(['command+backspace', 'ctrl+backspace'], function() {
+            if (!this.deleteKeys) {
+                this.deleteKeys = ['command+backspace', 'ctrl+backspace'];
+                if (process.platform !== 'darwin') {
+                    this.deleteKeys.push('del');
+                }
+            }
+            Mousetrap.bind(this.deleteKeys, function() {
                 for ( var i = 0; i < this.selection.length; ++i ) {
                     this.atlas.remove(this.selection[i].data.sprite);
                 }
@@ -631,7 +637,9 @@
         },
 
         _blurAction: function ( event ) {
-            Mousetrap.unbind(['command+backspace', 'ctrl+backspace']);
+            if (this.deleteKeys) {
+                Mousetrap.unbind(this.deleteKeys);
+            }
         },
 
         _zoomChanged: function ( zoom ) {

@@ -40,6 +40,7 @@
                 { name: '4096', value: 4096 },
             ];
             this.canvasSettings = new AtlasCanvasSettings();
+            this.version = 'Atlas Editor <%= gulp_version %> (Build <%= gulp_build %>)';
         },
 
         domReady: function () {

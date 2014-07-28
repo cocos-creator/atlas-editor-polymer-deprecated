@@ -8,6 +8,7 @@ var uglify = require('gulp-uglify');
 var stylus = require('gulp-stylus');
 var vulcanize = require('gulp-vulcanize');
 var Q = require('q');
+var es = require('event-stream');
 
 var paths = {
     ext_core: [ 
@@ -91,8 +92,35 @@ gulp.task('js-no-uglify', function() {
     ;
 });
 
+// write version
+var pkg = require('./package.json');
+var task_version = function () {
+    var writeVersion = function () {
+        return es.map(function(file, callback) {
+            var date = new Date();
+            var yy = new String(date.getFullYear()).substring(2);
+            var m = new String(date.getMonth() + 1);
+            var mm = m.length == 2 ? m : '0' + m;
+            var d = new String(date.getDate());
+            var dd = d.length == 2 ? d : '0' + d;
+            var build = dd + mm + yy;
+
+            var data = { file: file, gulp_version: pkg.version, gulp_build: build };
+            //console.log(file.contents.toString());
+            file.contents = new Buffer(gutil.template(file.contents, data));
+            callback(null, file);
+        });
+    };
+    return gulp.src('bin/elements/atlas-editor.js')
+    .pipe(writeVersion())
+    .pipe(gulp.dest('bin/elements'));
+};
+
+gulp.task('version', ['js'], task_version);
+gulp.task('version-no-uglify', ['js-no-uglify'], task_version);
+
 // html
-gulp.task('build-html', ['cp-html', 'css', 'js-no-uglify'], function() {
+gulp.task('build-html', ['cp-html', 'css', 'version-no-uglify'], function() {
     return gulp.src('bin/app.html')
     .pipe(vulcanize({
         dest: 'bin',
@@ -102,7 +130,7 @@ gulp.task('build-html', ['cp-html', 'css', 'js-no-uglify'], function() {
     .pipe(gulp.dest('bin'))
     ;
 });
-gulp.task('build-html-dev', ['cp-html', 'css', 'js-no-uglify'], function() {
+gulp.task('build-html-dev', ['cp-html', 'css', 'version-no-uglify'], function() {
     return gulp.src('bin/app.html')
     .pipe(vulcanize({
         dest: 'bin',
@@ -119,7 +147,7 @@ gulp.task('watch', function() {
     gulp.watch(paths.ext_editor_ui, ['cp-editor-ui']).on ( 'error', gutil.log );
     gulp.watch(paths.img, ['cp-img']).on ( 'error', gutil.log );
     gulp.watch(paths.css, ['css', 'build-html-dev']).on ( 'error', gutil.log );
-    gulp.watch(paths.js, ['js-no-uglify', 'build-html-dev']).on ( 'error', gutil.log );
+    gulp.watch(paths.js, ['version-no-uglify', 'build-html-dev']).on ( 'error', gutil.log );
     gulp.watch(paths.html, ['build-html-dev']).on ( 'error', gutil.log );
 });
 

@@ -132,7 +132,7 @@
 
                 // process rect select
                 if ( self.rectSelecting ) {
-                    var cursorPos = event.point.add(-0.5,-0.5);
+                    var cursorPos = event.point.add(0.5,0.5);
                     var rect = new paper.Rectangle(self.rectSelectStartAt, cursorPos);
                     self.selectRect.position = rect.center;
                     self.selectRect.size = rect.size;

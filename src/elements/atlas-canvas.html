@@ -17,6 +17,13 @@
         width: 100%;
         height: 100%;
     }
+    #version {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        color: #ccc;
+        font-size: 12px;
+    }
     #toolbar {
         position: absolute;
         box-sizing: border-box;
@@ -62,20 +69,21 @@
 </canvas>
 
 <div id="toolbar">
-<div class="box flex-row">
-    <i class="fa fa-search-minus"></i>
-    <span class="space"></span>                                                                                                        
-    <fire-ui-slider value={{zoom}} min={{minZoom}} max={{maxZoom}}></fire-ui-slider>
-    <span class="space"></span>                                                                                                        
-    <i class="fa fa-search-plus"></i>
-    <span class="space"></span>                                                                                                        
+    <div class="box flex-row">
+        <i class="fa fa-search-minus"></i>
+        <span class="space"></span>                                                                                                        
+        <fire-ui-slider value={{zoom}} min={{minZoom}} max={{maxZoom}}></fire-ui-slider>
+        <span class="space"></span>                                                                                                        
+        <i class="fa fa-search-plus"></i>
+        <span class="space"></span>                                                                                                        
 
-    <fire-ui-unit-input value={{zoom}} min={{minZoom}} max={{maxZoom}} type="float" style="width: 20px;"></fire-ui-unit-input>
-    <span class="space"></span>                                                                                                        
+        <fire-ui-unit-input value={{zoom}} min={{minZoom}} max={{maxZoom}} type="float" style="width: 20px;"></fire-ui-unit-input>
+        <span class="space"></span>                                                                                                        
 
-    <fire-ui-button on-click={{resetCamera}}><i class="fa fa-refresh"></i></fire-ui-button>
+        <fire-ui-button on-click={{resetCamera}}><i class="fa fa-refresh"></i></fire-ui-button>
+    </div>
 </div>
-</div>
+<div id="version">{{version}}</div>
 
 </template>
 

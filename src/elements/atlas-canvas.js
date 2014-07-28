@@ -255,6 +255,10 @@
             this.repaint();
         },
 
+        setVersion: function ( version ) {
+            this.version = version;
+        },
+
         resetCamera: function () {
             this.zoom = 1.0;
             this.setPos(0,0);

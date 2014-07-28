@@ -26,20 +26,20 @@
 
 <div tabIndex="1" id="right-sidebar" class="panel right sidebar">
     <fire-ui-section title="Atlas">
-        <fire-ui-field name="Auto Size" value="{{atlas.autoSize}}"></fire-ui-field>                           
-        <fire-ui-field name="Width" value="{{atlas.width}}" type="enum" enumList="{{sizeList}}"></fire-ui-field>                           
-        <fire-ui-field name="Height" value="{{atlas.height}}" type="enum" enumList="{{sizeList}}"></fire-ui-field>                         
-        <fire-ui-field name="Trim" value="{{atlas.trim}}"></fire-ui-field>                         
-        <fire-ui-field name="Trim Threshold" value="{{atlas.trimThreshold}}" type="int"></fire-ui-field>                         
+        <fire-ui-name-field name="Auto Size" value="{{atlas.autoSize}}"></fire-ui-name-field>                           
+        <fire-ui-name-field name="Width" value="{{atlas.width}}" type="enum" enumList="{{sizeList}}"></fire-ui-name-field>                           
+        <fire-ui-name-field name="Height" value="{{atlas.height}}" type="enum" enumList="{{sizeList}}"></fire-ui-name-field>                         
+        <fire-ui-name-field name="Trim" value="{{atlas.trim}}"></fire-ui-name-field>                         
+        <fire-ui-name-field name="Trim Threshold" value="{{atlas.trimThreshold}}" type="int"></fire-ui-name-field>                         
 
-        <fire-ui-field name="Algorithm" value="{{atlas.algorithm}}" type="enum" enumType="FIRE.Atlas.Algorithm"></fire-ui-field>                         
-        <fire-ui-field name="Sort By" value="{{atlas.sortBy}}" type="enum" enumType="FIRE.Atlas.SortBy"></fire-ui-field>                         
-        <fire-ui-field name="Sort Order" value="{{atlas.sortOrder}}" type="enum" enumType="FIRE.Atlas.SortOrder"></fire-ui-field>                         
-        <fire-ui-field name="Allow Rotate" value="{{atlas.allowRotate}}"></fire-ui-field>                         
+        <fire-ui-name-field name="Algorithm" value="{{atlas.algorithm}}" type="enum" enumType="FIRE.Atlas.Algorithm"></fire-ui-name-field>                         
+        <fire-ui-name-field name="Sort By" value="{{atlas.sortBy}}" type="enum" enumType="FIRE.Atlas.SortBy"></fire-ui-name-field>                         
+        <fire-ui-name-field name="Sort Order" value="{{atlas.sortOrder}}" type="enum" enumType="FIRE.Atlas.SortOrder"></fire-ui-name-field>                         
+        <fire-ui-name-field name="Allow Rotate" value="{{atlas.allowRotate}}"></fire-ui-name-field>                         
 
-        <fire-ui-field name="Contour Bleed" value="{{atlas.useContourBleed}}"></fire-ui-field>                         
-        <fire-ui-field name="Padding Bleed" value="{{atlas.usePaddingBleed}}"></fire-ui-field>                         
-        <fire-ui-field name="Custom Padding" value="{{atlas.customPadding}}" type="int"></fire-ui-field>                         
+        <fire-ui-name-field name="Contour Bleed" value="{{atlas.useContourBleed}}"></fire-ui-name-field>                         
+        <fire-ui-name-field name="Padding Bleed" value="{{atlas.usePaddingBleed}}"></fire-ui-name-field>                         
+        <fire-ui-name-field name="Custom Padding" value="{{atlas.customPadding}}" type="int"></fire-ui-name-field>                         
         <fire-ui-custom-field name="Build Color">                                      
             <fire-ui-checkbox value="{{atlas.customBuildColor}}"></fire-ui-checkbox>   
             <span class="space"></span>                                                
@@ -50,15 +50,15 @@
     <span class="space"></span>                                                                            
 
     <fire-ui-section title="Canvas">                                                                                         
-        <fire-ui-field name="Smooth Canvas" value="{{canvasSettings.smoothCanvas}}"></fire-ui-field>                                 
-        <fire-ui-field name="Show Checkerboard" value="{{canvasSettings.showCheckerboard}}"></fire-ui-field>                         
+        <fire-ui-name-field name="Smooth Canvas" value="{{canvasSettings.smoothCanvas}}"></fire-ui-name-field>                                 
+        <fire-ui-name-field name="Show Checkerboard" value="{{canvasSettings.showCheckerboard}}"></fire-ui-name-field>                         
         <fire-ui-custom-field name="Background">                                      
             <fire-ui-checkbox value="{{canvasSettings.customBackgroundColor}}"></fire-ui-checkbox>   
             <span class="space"></span>                                                
             <fire-ui-color class="flex-1" value="{{canvasSettings.backgroundColor}}"></fire-ui-color>
         </fire-ui-custom-field>                                                        
-        <fire-ui-field name="Element Background" value="{{canvasSettings.elementBgColor}}"></fire-ui-field>                          
-        <fire-ui-field name="Element Select" value="{{canvasSettings.elementSelectColor}}"></fire-ui-field>                          
+        <fire-ui-name-field name="Element Background" value="{{canvasSettings.elementBgColor}}"></fire-ui-name-field>                          
+        <fire-ui-name-field name="Element Select" value="{{canvasSettings.elementSelectColor}}"></fire-ui-name-field>                          
     </fire-ui-section>                                                                                                       
 
     <span class="space"></span>                                                                            

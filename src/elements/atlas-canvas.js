@@ -552,6 +552,7 @@
 
                     outlineMask.position = outlineCenter;
                     outlineMask.size = outlineSize;
+                    outlineMask.strokeColor.alpha = this.elementSelectColor.a;
                 }
             }
 

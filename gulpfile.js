@@ -98,12 +98,12 @@ var task_version = function () {
     var writeVersion = function () {
         return es.map(function(file, callback) {
             var date = new Date();
-            var yy = new String(date.getFullYear()).substring(2);
-            var m = new String(date.getMonth() + 1);
+            var yy = date.getFullYear().toString().substring(2);
+            var m = (date.getMonth()+1).toString();
             var mm = m.length == 2 ? m : '0' + m;
-            var d = new String(date.getDate());
+            var d = date.getDate().toString();
             var dd = d.length == 2 ? d : '0' + d;
-            var build = dd + mm + yy;
+            var build = yy + mm + dd;
 
             var data = { file: file, gulp_version: pkg.version, gulp_build: build };
             //console.log(file.contents.toString());

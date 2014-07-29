@@ -21,6 +21,8 @@
         },
 
         rebuild: function () {
+            this.clearSelect();
+
             var listRoot = this.$.list;
             while (listRoot.firstChild) {
                 listRoot.removeChild(listRoot.firstChild);
@@ -62,7 +64,7 @@
             if ( FIRE.find( this.shadowRoot, event.relatedTarget ) )
                 return;
 
-            this.clearSelect();
+            // this.clearSelect();
             this.focused = false;
             this.classList.toggle('focused', this.focused);
         },

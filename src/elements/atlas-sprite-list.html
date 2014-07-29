@@ -1,0 +1,19 @@
+<polymer-element 
+    name="atlas-sprite-list" 
+    constructor="AtlasSpriteList"
+    >
+<template>
+<link rel="stylesheet" href="atlas-sprite-list.css">
+
+<div id="focus"
+    on-focusin="{{focusinAction}}"
+    on-focusout="{{focusoutAction}}"
+    on-click="{{clickAction}}"
+    >
+    <div id="list" class="inner">
+    </div>
+</div>
+</template>
+
+<script type="text/javascript" src="atlas-sprite-list.js"></script>
+</polymer-element>

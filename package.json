@@ -7,9 +7,9 @@
   "licenseUrl": "http://opensource.org/licenses/MIT",
   "main": "index.html",
   "window": {
-    "toolbar": true,
+    "toolbar": false,
     "width": 1280,
-    "height": 900
+    "height": 720
   },
   "dependencies": {},
   "devDependencies": {

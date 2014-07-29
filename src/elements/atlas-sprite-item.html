@@ -1,0 +1,19 @@
+<polymer-element 
+    name="atlas-sprite-item" 
+    constructor="AtlasSpriteItem"
+    >
+<template>
+<link rel="stylesheet" href="atlas-sprite-item.css">
+
+<div id="focus" class="flex-row">
+    <div id="image" class="img"></div>
+    <div id="content" class="content flex-2"></div>
+    <div id="btn-del" class="del"
+        on-click="{{delClickAction}}">
+        <i class="fa fa-times"></i>
+    </div>
+</div>
+</template>
+
+<script type="text/javascript" src="atlas-sprite-item.js"></script>
+</polymer-element>

@@ -46,6 +46,7 @@
         domReady: function () {
             this.atlasCanvas = this.$["atlas-canvas"];
             this.atlasCanvas.setVersion(this.version);
+            this.spriteListView = this.$["sprite-list-view"];
         },
 
         exportAction: function () {

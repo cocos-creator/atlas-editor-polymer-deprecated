@@ -3,12 +3,19 @@
         minZoom: 0.1,
         maxZoom: 8.0,
 
+        publish: {
+            atlas: null,
+            customBackgroundColor: false,
+            backgroundColor: new FIRE.Color(1,0,1,1),
+            elementBgColor: new FIRE.Color( 0.1, 0.38, 1, 0.5 ),
+            elementSelectColor: new FIRE.Color(0,0,0,1),
+        },
+
         observe: {
             'zoom': 'updateZoom', 
         },
 
         created: function () {
-            this.atlas = new FIRE.Atlas(); 
             this.zoom = 1.0;
 
             this.transformSelectRect = null;

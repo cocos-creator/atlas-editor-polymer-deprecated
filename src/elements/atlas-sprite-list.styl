@@ -1,0 +1,49 @@
+:host {
+    box-sizing: border-box
+    font-size: 12px
+    font-family: Helvetica,Arial,sans-serif
+    background-color: #2e2e2e
+
+    #focus:focus {
+        outline: none
+    }
+
+    #focus {
+        flex: 1 1 auto
+        border: 1px solid black
+        overflow-x: hidden
+        overflow-y: auto
+
+        color: #bdbdbd
+        background-color: #171717
+
+        &::-webkit-scrollbar {
+            height: 8px
+            width: 8px
+        }
+        &::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2)
+            border: 1px solid #999
+            border-radius: 1px
+
+            &:hover {
+                background: rgba(255,255,255,0.4)
+                border: 1px solid #aaa
+            }
+        }
+        &::-webkit-scrollbar-track {
+            background-clip: padding-box
+            background-color: rgba(255,255,255,0.1)
+            border-left: 1px solid black
+        }
+        &::-webkit-scrollbar-button {
+            height: 0
+            width: 0
+        }
+        &::-webkit-scrollbar-corner {
+            background-color: #171717
+        }
+
+        box-shadow: inset 0px 0px 4px 1px rgba(0,0,0,0.2)
+    }
+}

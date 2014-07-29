@@ -41,6 +41,7 @@
             ];
             this.canvasSettings = new AtlasCanvasSettings();
             this.version = 'v<%= gulp_version %> (Build <%= gulp_build %>)';
+            this.selection = [];
         },
 
         domReady: function () {

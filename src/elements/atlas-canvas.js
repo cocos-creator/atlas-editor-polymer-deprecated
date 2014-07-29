@@ -5,6 +5,7 @@
 
         publish: {
             atlas: null,
+            selectedSprites: [],
             customBackgroundColor: false,
             backgroundColor: new FIRE.Color(1,0,1,1),
             elementBgColor: new FIRE.Color( 0.1, 0.38, 1, 0.5 ),
@@ -13,12 +14,13 @@
 
         observe: {
             'zoom': 'updateZoom', 
+            'selectedSprites': 'updateSelection',
         },
 
         created: function () {
             this.zoom = 1.0;
-
             this.transformSelectRect = null;
+            this.selecting = false;
         },
 
         domReady: function () {
@@ -336,6 +338,35 @@
                 this._unselect([item]);
                 this.selection.splice(idx,1);
             // }
+        },
+
+        updateSelection: function () {
+            if ( this.selecting ) {
+                this.selecting = false;
+                return;
+            }
+
+            if ( !this.atlasLayer )
+                return;
+
+            var tmpList = this.selectedSprites.slice(0);
+            for ( var i = 0; i < this.atlasLayer.children.length; ++i ) {
+                var item = this.atlasLayer.children[i];
+
+                for ( var j = tmpList.length-1; j >= 0; --j ) {
+                    var sprite = tmpList[j];
+
+                    if ( item.data.sprite == sprite ) {
+                        tmpList.splice(j,1);
+                        item.data.outline.visible = true;
+                        item.data.outlineMask.visible = true;
+                        item.fm_selected = true;
+                        item.data.bgItem.bringToFront();
+                        item.bringToFront();
+                    }
+                }
+            }
+            this.repaint();
         },
 
         doRectSelectOnLayer: function ( layer ) {

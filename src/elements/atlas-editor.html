@@ -12,6 +12,7 @@
     <atlas-canvas 
         id="atlas-canvas" 
         atlas="{{atlas}}"
+        selectedSprites="{{selection}}"
         customBackgroundColor="{{canvasSettings.customBackgroundColor}}"
         backgroundColor="{{canvasSettings.backgroundColor}}"
         elementBgColor="{{canvasSettings.elementBgColor}}"
@@ -23,7 +24,12 @@
 
 <div tabIndex="1" id="sprite-list-view" class="panel left sidebar flex-col flex-stretch">
     <div class="title">Sprites</div>
-    <atlas-sprite-list class="flex-1 flex-col flex-stretch" atlas="{{atlas}}"></atlas-sprite-list>
+    <atlas-sprite-list 
+        class="flex-1 flex-col flex-stretch" 
+        atlas="{{atlas}}"
+        selectedSprites="{{selection}}"
+        >
+    </atlas-sprite-list>
 </div>
 
 <div tabIndex="1" id="settings" class="panel right sidebar">

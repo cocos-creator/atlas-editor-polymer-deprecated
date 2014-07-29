@@ -522,36 +522,23 @@
                 bgItem.size = [w, h];
                 bgItem.position = new paper.Rectangle(left, top, w, h).center;
                 bgItem.fillColor = PaperUtils.color( this.elementBgColor );
-
+                
+                // align to pixel
+                PaperUtils.pixelPerfect(bgItem);
+                
                 // update outline
                 var outline = child.data.outline;
                 var outlineMask = child.data.outlineMask;
                 if (outline.visible) {
-                    var outlineBounds = bgItem.bounds;
-                    // outlineBounds = outlineBounds.expand(-outline.strokeWidth/this.zoom);
+                    var outlineBounds = atlasLayerMatrix._transformBounds(bgItem.bounds);
+                    var halfStrokeWidth = outline.strokeWidth * 0.5;
 
-                    var outlineTL = atlasLayerMatrix.transform(outlineBounds.topLeft);
-                    var outlineBR = atlasLayerMatrix.transform(outlineBounds.bottomRight);
-                    outlineTL.x = posFilter(outlineTL.x);
-                    outlineTL.y = posFilter(outlineTL.y);
-                    outlineBR.x = posFilter(outlineBR.x);
-                    outlineBR.y = posFilter(outlineBR.y);
-                    var outlineStrokeWidth = outline.strokeWidth;
-                    var outlineSize = new paper.Point(
-                        outlineBR.x-outlineTL.x, 
-                        outlineBR.y-outlineTL.y
-                    );
-                    var outlineCenter = new paper.Point( 
-                        outlineTL.x+outlineSize.x/2+outlineStrokeWidth/2, 
-                        outlineTL.y+outlineSize.y/2+outlineStrokeWidth/2
-                    );
-
-                    outline.position = outlineCenter;
-                    outline.size = outlineSize;
+                    outline.position = outlineBounds.center.add([halfStrokeWidth,halfStrokeWidth]);
+                    outline.size = outlineBounds.size;
                     outline.strokeColor = PaperUtils.color( this.elementSelectColor );
 
-                    outlineMask.position = outlineCenter;
-                    outlineMask.size = outlineSize;
+                    outlineMask.position = outline.position;
+                    outlineMask.size = outline.size
                     outlineMask.strokeColor.alpha = this.elementSelectColor.a;
                 }
             }

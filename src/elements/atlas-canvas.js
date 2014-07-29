@@ -531,8 +531,10 @@
                 var outlineMask = child.data.outlineMask;
                 if (outline.visible) {
                     var outlineBounds = atlasLayerMatrix._transformBounds(bgItem.bounds);
-                    var halfStrokeWidth = outline.strokeWidth * 0.5;
+                    outlineBounds.width -= outline.strokeWidth;
+                    outlineBounds.height -= outline.strokeWidth;
 
+                    var halfStrokeWidth = outline.strokeWidth * 0.5;
                     outline.position = outlineBounds.center.add([halfStrokeWidth,halfStrokeWidth]);
                     outline.size = outlineBounds.size;
                     outline.strokeColor = PaperUtils.color( this.elementSelectColor );
@@ -546,20 +548,13 @@
             //
             var borderTL = atlasLayerMatrix.transform([0,0]);
             var borderBR = atlasLayerMatrix.transform([this.atlas.width,this.atlas.height]);
-            borderTL.x = posFilter(borderTL.x);
-            borderTL.y = posFilter(borderTL.y);
-            borderBR.x = posFilter(borderBR.x);
-            borderBR.y = posFilter(borderBR.y);
+            borderTL = borderTL.round();
+            borderBR = borderBR.round();
 
             var strokeWidth = this.border.strokeWidth;
-            var size = new paper.Point(
-                borderBR.x-borderTL.x+strokeWidth, 
-                borderBR.y-borderTL.y+strokeWidth
-            );
-            var center = new paper.Point( 
-                borderTL.x+size.x/2-strokeWidth/2, 
-                borderTL.y+size.y/2-strokeWidth/2
-            );
+            var center = borderTL.add(borderBR).multiply(0.5);
+            var size = borderBR.subtract(borderTL).add([strokeWidth, strokeWidth]);
+
             this.border.position = center;
             this.border.size = size;
         },

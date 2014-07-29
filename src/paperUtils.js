@@ -65,4 +65,18 @@ var PaperUtils;
         return false;
     };
 
+    //
+    PaperUtils.pixelPerfect = function (item) {
+        var matrix = item.parent.globalMatrix;
+        var halfSize = item.size.multiply(0.5);
+        // caculate rounded transform
+        var globalLT = matrix.transform(item.position.subtract(halfSize)).round();
+        var globalRB = matrix.transform(item.position.add(halfSize)).round();
+        var globalPos = globalLT.add(globalRB).multiply(0.5);
+        var globalSize = globalRB.subtract(globalLT);
+        // apply rounded transform
+        item.position = matrix.inverseTransform(globalPos);
+        item.size = globalSize.divide(matrix.scaling);
+    };
+
 })(PaperUtils || (PaperUtils = {}));

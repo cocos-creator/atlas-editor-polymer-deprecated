@@ -145,12 +145,14 @@
                     self.selectRect.size = rect.size;
                     self.selectRect.bringToFront();
 
-                    self.doRectSelect(self.cameraLayer);
+                    self.doRectSelect(self.atlasLayer);
+                    self.repaint();
                 }
 
                 // process dragging item
                 if ( self.draggingItems ) {
                     self._moveSelected( self.selection, event.delta );
+                    self.repaint();
                 }
             };
 
@@ -210,7 +212,7 @@
                     FIRE.removeDragGhost();
                 }
                 if ( self.rectSelecting ) {
-                    self.confirmRectSelect(self.cameraLayer);
+                    self.confirmRectSelect(self.atlasLayer);
 
                     self.rectSelecting = false;
                     self.selectRect.position = [0,0]; 
@@ -336,30 +338,26 @@
             // }
         },
 
-        doRectSelectRecrusively: function ( node ) {
-            for ( var i = 0; i < node.children.length; ++i ) {
-                var item = node.children[i];
+        doRectSelectOnLayer: function ( layer ) {
+            var selectRectTopLeft = layer.globalMatrix.inverseTransform(this.selectRect.bounds.topLeft);
+            var selectRectBottomRight = layer.globalMatrix.inverseTransform(this.selectRect.bounds.bottomRight);
+            this.transformSelectRect = new paper.Rectangle(selectRectTopLeft,selectRectBottomRight); 
+
+            for ( var i = 0; i < layer.children.length; ++i ) {
+                var item = layer.children[i];
                 if ( item.selectable ) {
-                    if ( item.className === 'Layer' ) {
-                        var selectRectTopLeft = item.globalMatrix.inverseTransform(this.selectRect.bounds.topLeft);
-                        var selectRectBottomRight = item.globalMatrix.inverseTransform(this.selectRect.bounds.bottomRight);
-                        this.transformSelectRect = new paper.Rectangle(selectRectTopLeft,selectRectBottomRight); 
-                        this.doRectSelectRecrusively(item);
-                    }
-                    else {
-                        if ( PaperUtils.rectRectContains( this.transformSelectRect, item.bounds ) !== 0 ||
-                             PaperUtils.rectRectIntersect( this.transformSelectRect, item.bounds ) )
-                        {
-                            if ( this.selectCandicates.indexOf(item) === -1 ) {
-                                this.selectCandicates.push(item);
-                            }
+                    if ( PaperUtils.rectRectContains( this.transformSelectRect, item.bounds ) !== 0 ||
+                         PaperUtils.rectRectIntersect( this.transformSelectRect, item.bounds ) )
+                    {
+                        if ( this.selectCandicates.indexOf(item) === -1 ) {
+                            this.selectCandicates.push(item);
                         }
                     }
                 }
             }
         },
 
-        doRectSelect: function ( node ) {
+        doRectSelect: function ( layer ) {
             var i = -1;
             var item = null;
             for ( i = this.selectCandicates.length-1; i >= 0; --i ) {
@@ -370,11 +368,11 @@
             }
             this._unselect( this.selectCandicates );
             this.selectCandicates = [];
-            this.doRectSelectRecrusively (node);
+            this.doRectSelectOnLayer (layer);
             this._select( this.selectCandicates );
         },
 
-        confirmRectSelect: function ( node ) {
+        confirmRectSelect: function ( layer ) {
             var i = -1;
             var item = null;
             for ( i = this.selectCandicates.length-1; i >= 0; --i ) {
@@ -385,7 +383,7 @@
             }
             this._unselect( this.selectCandicates );
             this.selectCandicates = [];
-            this.doRectSelectRecrusively (node);
+            this.doRectSelectOnLayer (layer);
             for ( i = 0; i < this.selectCandicates.length; ++i ) {
                 item = this.selectCandicates[i];
                 if ( this.selection.indexOf(item) === -1 ) {
@@ -435,7 +433,6 @@
             this.atlasBGLayer.position = [-this.atlas.width*0.5, -this.atlas.height*0.5];
             this.atlasLayer = PaperUtils.createLayer();
             this.atlasLayer.position = [-this.atlas.width*0.5, -this.atlas.height*0.5];
-            this.atlasLayer.selectable = true;
             // this.atlasHandlerLayer = PaperUtils.createLayer();
             // this.atlasHandlerLayer.position = [
             //     -this.atlas.width*0.5, 
@@ -547,7 +544,7 @@
                     outline.strokeColor = PaperUtils.color( this.elementSelectColor );
 
                     outlineMask.position = outline.position;
-                    outlineMask.size = outline.size
+                    outlineMask.size = outline.size;
                     outlineMask.strokeColor.alpha = this.elementSelectColor.a;
                 }
             }
@@ -651,7 +648,6 @@
                 item.data.bgItem.bringToFront();
                 item.bringToFront();
             }
-            this.repaint();
         },
 
         _unselect: function ( items ) {
@@ -661,7 +657,6 @@
                 item.data.outlineMask.visible = false;
                 item.fm_selected = false;
             }
-            this.repaint();
         },
 
         _moveSelected: function ( items, delta ) {
@@ -671,7 +666,6 @@
                 sprite.x = sprite.x + delta.x/this.zoom;
                 sprite.y = sprite.y + delta.y/this.zoom;
             }
-            this.repaint();
         },
 
         resizeAtlas: function () {

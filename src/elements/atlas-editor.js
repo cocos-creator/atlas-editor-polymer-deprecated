@@ -102,7 +102,7 @@
                             var blob = zip.generate({ type: "blob" });
                             //console.timeEnd('zip');
                             resolve(blob);
-                        })
+                        });
                     });
                 });
             }

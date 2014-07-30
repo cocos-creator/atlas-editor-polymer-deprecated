@@ -5,7 +5,7 @@ requirejs.config({
         // exporters
         'exporter-cocos2d': 'exporters/cocos2d/index',
         // RequireJS plugins
-        'text': 'ext/requirejs-text/text',
+        'text': '3rd/requirejs-text.node',
         // others
         'libpng': "bin/libpngWrapper",
         'jszip': "ext/jszip/dist/jszip.min",

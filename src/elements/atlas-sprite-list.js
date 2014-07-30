@@ -48,8 +48,45 @@
                 return;
             }
 
-            console.log("updateSelection at list");
-            // TODO:
+            // DEBUG:
+            // console.log("updateSelection at list");
+
+            var tmpList = this.selectedSprites.slice(0);
+            var item = null;
+            var i = -1;
+            var selected = [];
+            var listRoot = this.$.list;
+            this.selection = [];
+
+            for ( i = 0; i < listRoot.children.length; ++i ) {
+                item = listRoot.children[i];
+
+                if ( item instanceof AtlasSpriteItem ) {
+                    var found = false;
+
+                    for ( var j = 0; j < tmpList.length; ++j ) {
+                        var sprite = tmpList[j];
+
+                        if ( item.value == sprite ) {
+                            selected.push(item);
+
+                            tmpList.splice(j,1);
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if ( found === false ) {
+                        item.unselect();
+                    }
+                }
+            }
+
+            for ( i = 0; i < selected.length; ++i ) {
+                item = selected[i];
+                this.selection.push(item);
+                item.select();
+            }
         },
 
         focusinAction: function (event) {

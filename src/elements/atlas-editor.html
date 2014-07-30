@@ -22,17 +22,7 @@
         </atlas-canvas>
 </div>
 
-<div tabIndex="1" id="sprite-list-view" class="panel left sidebar flex-col flex-stretch">
-    <div class="title">Sprites</div>
-    <atlas-sprite-list 
-        class="flex-1 flex-col flex-stretch" 
-        atlas="{{atlas}}"
-        selectedSprites="{{selection}}"
-        >
-    </atlas-sprite-list>
-</div>
-
-<div tabIndex="1" id="settings" class="panel right sidebar">
+<div tabIndex="1" id="settings" class="panel left sidebar">
     <fire-ui-section title="Atlas">
         <fire-ui-prop name="Auto Size" value="{{atlas.autoSize}}"></fire-ui-prop>                           
         <fire-ui-prop name="Width" value="{{atlas.width}}" type="enum" enumList="{{sizeList}}"></fire-ui-prop>                           
@@ -78,6 +68,16 @@
         <fire-ui-button on-click="{{layoutAction}}">Layout</fire-ui-button>                                                             
         <span class="space"></span>
     </div>
+</div>
+
+<div tabIndex="1" id="sprite-list-view" class="panel right sidebar flex-col flex-stretch">
+    <div class="title">Sprites</div>
+    <atlas-sprite-list 
+        class="flex-1 flex-col flex-stretch" 
+        atlas="{{atlas}}"
+        selectedSprites="{{selection}}"
+        >
+    </atlas-sprite-list>
 </div>
 
 </template>

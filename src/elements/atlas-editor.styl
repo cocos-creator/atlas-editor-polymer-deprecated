@@ -1,5 +1,5 @@
-right-sidebar-width = 320px
-left-sidebar-width = 240px
+right-sidebar-width = 240px
+left-sidebar-width = 320px
 
 :host {
     display: block
@@ -14,7 +14,7 @@ left-sidebar-width = 240px
         margin-left: left-sidebar-width
     }
 
-    .left.sidebar {
+    .left {
         position: fixed
         width: left-sidebar-width
         height: 100%
@@ -22,13 +22,32 @@ left-sidebar-width = 240px
         left: 0
         z-index: 100
         box-shadow: 2px 0 3px 0 rgba(0,0,0,0.2)
+    }
 
+    .right {
+        position: fixed
+        width: right-sidebar-width
+        height: 100%
+        top: 0
+        right: 0
+        z-index: 100
+        box-shadow: -2px 0 3px 0 rgba(0,0,0,0.2)
+    }
+
+    .sidebar {
         background-color: #171717
         border-top: 1px solid #000
         color: white
+    }
 
+    span.space {
+        width: 5px;
+        height: 5px;
+        display: block;
+    }
+
+    #sprite-list-view {
         .title {
-            
             font-family: Helvetica,Arial,sans-serif
             padding: 8px
             font-size: 10px
@@ -42,25 +61,5 @@ left-sidebar-width = 240px
             background: #242424
             color: #b1b1b1
         }
-    }
-
-    .right.sidebar {
-        position: fixed
-        width: right-sidebar-width
-        height: 100%
-        top: 0
-        right: 0
-        z-index: 100
-        box-shadow: -2px 0 3px 0 rgba(0,0,0,0.2)
-
-        background-color: #171717
-        border-top: 1px solid #000
-        color: white
-    }
-
-    span.space {
-        width: 5px;
-        height: 5px;
-        display: block;
     }
 }

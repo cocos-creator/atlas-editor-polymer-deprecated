@@ -309,82 +309,67 @@
             if ( !item )
                 return;
 
+            this.selecting = true;
+
             var idx = this.selection.indexOf(item); 
             if ( idx === -1 ) {
                 this._select(item);
                 this.selection.push(item);
+                this.selectedSprites.push(item.data.sprite);
             }
             else {
                 this._unselect(item);
                 this.selection.splice(idx,1);
+
+                idx = this.selectedSprites.indexOf(item.value);
+                this.selectedSprites.splice(idx,1);
             }
         },
 
         clearSelect: function () {
+            if ( this.selection.length === 0 )
+                return;
+
+            this.selecting = true;
+
             for ( var i = 0; i < this.selection.length; ++i ) {
                 this._unselect(this.selection[i]);
             }
             this.selection = [];
+            this.selectedSprites = [];
         },
 
         addSelect: function ( item ) {
-            // var idx = this.selection.indexOf(item); 
-            // if ( idx === -1 ) {
+            if ( !item )
+                return;
+
+            this.selecting = true;
+
+            var idx = this.selection.indexOf(item); 
+            if ( idx === -1 ) {
                 this._select(item);
                 this.selection.push(item);
-            // }
+                this.selectedSprites.push(item.data.sprite);
+            }
         },
 
         removeSelect: function ( item ) {
-            // var idx = this.selection.indexOf(item); 
-            // if ( idx !== -1 ) {
+            if ( !item )
+                return;
+
+            this.selecting = true;
+
+            var idx = this.selection.indexOf(item); 
+            if ( idx !== -1 ) {
                 this._unselect(item);
                 this.selection.splice(idx,1);
-            // }
+
+                idx = this.selectedSprites.indexOf(item.value);
+                this.selectedSprites.splice(idx,1);
+            }
         },
 
-        updateSelection: function () {
-            if ( this.selecting ) {
-                this.selecting = false;
-                return;
-            }
-
-            if ( !this.atlasLayer )
-                return;
-
-            var tmpList = this.selectedSprites.slice(0);
-            var selected = [];
-            for ( var i = 0; i < this.atlasLayer.children.length; ++i ) {
-                var item = this.atlasLayer.children[i];
-
-                if ( item.selectable ) {
-                    var found = false;
-
-                    for ( var j = 0; j < tmpList.length; ++j ) {
-                        var sprite = tmpList[j];
-
-                        if ( item.data.sprite == sprite ) {
-                            selected.push(item);
-
-                            tmpList.splice(j,1);
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if ( found === false ) {
-                        this._unselect(item)
-                    }
-                }
-            }
-
-            for ( var i = 0; i < selected.length; ++i ) {
-                this._select(selected[i]);
-            }
-            this.repaint();
-        },
-
-        doRectSelectOnLayer: function ( layer ) {
+        _doRectSelectOnLayer: function ( layer ) {
             var selectRectTopLeft = layer.globalMatrix.inverseTransform(this.selectRect.bounds.topLeft);
             var selectRectBottomRight = layer.globalMatrix.inverseTransform(this.selectRect.bounds.bottomRight);
             this.transformSelectRect = new paper.Rectangle(selectRectTopLeft,selectRectBottomRight); 
@@ -404,6 +389,8 @@
         },
 
         doRectSelect: function ( layer ) {
+            this.selecting = true;
+
             var i = -1;
             var item = null;
             for ( i = this.selectCandicates.length-1; i >= 0; --i ) {
@@ -413,40 +400,104 @@
                 }
             }
 
-            for ( var i = 0; i < this.selectCandicates.length; ++i ) {
-                this._unselect(this.selectCandicates[i]);
+            for ( i = 0; i < this.selectCandicates.length; ++i ) {
+                item = this.selectCandicates[i];
+                this._unselect(item);
             }
             this.selectCandicates = [];
-            this.doRectSelectOnLayer (layer);
-            for ( var i = 0; i < this.selectCandicates.length; ++i ) {
-                this._select(this.selectCandicates[i]);
+            this._doRectSelectOnLayer (layer);
+
+            this.selectedSprites = [];
+            for ( i = 0; i < this.selectCandicates.length; ++i ) {
+                item = this.selectCandicates[i];
+                this._select(item);
+                this.selectedSprites.push(item.data.sprite);
             }
         },
 
         confirmRectSelect: function ( layer ) {
+            this.selecting = true;
+
             var i = -1;
             var item = null;
+
             for ( i = this.selectCandicates.length-1; i >= 0; --i ) {
                 item = this.selectCandicates[i];
                 if ( this.selection.indexOf(item) !== -1 ) {
                     this.selectCandicates.splice(i,1);
                 }
             }
-            for ( var i = 0; i < this.selectCandicates.length; ++i ) {
+
+            for ( i = 0; i < this.selectCandicates.length; ++i ) {
                 this._unselect(this.selectCandicates[i]);
             }
+
             this.selectCandicates = [];
-            this.doRectSelectOnLayer (layer);
+            this._doRectSelectOnLayer (layer);
+
+            this.selectedSprites = [];
             for ( i = 0; i < this.selectCandicates.length; ++i ) {
                 item = this.selectCandicates[i];
                 if ( this.selection.indexOf(item) === -1 ) {
                     this.selection.push(item);
+                    this.selectedSprites.push(item.data.sprite);
                 }
             }
             this.selectCandicates = [];
-            for ( var i = 0; i < this.selection.length; ++i ) {
+
+            for ( i = 0; i < this.selection.length; ++i ) {
                 this._select(this.selection[i]);
             }
+        },
+
+        updateSelection: function () {
+            if ( this.selecting ) {
+                this.selecting = false;
+                return;
+            }
+
+            if ( !this.atlasLayer )
+                return;
+
+            // DEBUG:
+            // console.log("updateSelection at canvas");
+
+            var tmpList = this.selectedSprites.slice(0);
+            var item = null;
+            var i = -1;
+            var selected = [];
+            this.selection = [];
+
+            for ( i = 0; i < this.atlasLayer.children.length; ++i ) {
+                item = this.atlasLayer.children[i];
+
+                if ( item.selectable ) {
+                    var found = false;
+
+                    for ( var j = 0; j < tmpList.length; ++j ) {
+                        var sprite = tmpList[j];
+
+                        if ( item.data.sprite == sprite ) {
+                            selected.push(item);
+
+                            tmpList.splice(j,1);
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if ( found === false ) {
+                        this._unselect(item);
+                    }
+                }
+            }
+
+            for ( i = 0; i < selected.length; ++i ) {
+                item = selected[i];
+                this._select(item);
+                this.selection.push(item);
+            }
+            this.repaint();
         },
 
         // =============================================

@@ -199,16 +199,27 @@
                 img.src = event.target.result;  // 这里的dataURL是原始数据，但Image填充到画布上后，透明像素的部分会变成黑色
             };
 
+            //
+            var fileProcessList = [];
+            var i = 0;
+            var file = null;
             var onloadBinded = onload.bind(this);
-            for (var i = 0; i < files.length; ++i) {
+
+            for (i = 0; i < files.length; ++i) {
                 file = files[i];
                 if ( acceptedTypes[file.type] === true ) {
-                    processing += 1;
-                    var reader = new FileReader();
-                    reader.filename = file.name;
-                    reader.onload = onloadBinded;
-                    reader.readAsDataURL(file);
+                    fileProcessList.push(file);
                 }
+            }
+
+            //
+            processing = fileProcessList.length;
+            for (i = 0; i < fileProcessList.length; ++i) {
+                file = fileProcessList[i];
+                var reader = new FileReader();
+                reader.filename = file.name;
+                reader.onload = onloadBinded;
+                reader.readAsDataURL(file);
             }
         },
 

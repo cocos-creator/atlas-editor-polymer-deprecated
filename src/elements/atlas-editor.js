@@ -228,6 +228,16 @@
             this.atlasCanvas.repaint();
         },
 
+        deleteSpritesAction: function () {
+            if ( this.atlas.autoSize ) {
+                this.atlas.width = 128;
+                this.atlas.height = 128;
+                this.atlas.sort();
+                this.atlas.layout();
+            }
+            this.atlasCanvas.rebuildAtlas(false);
+        },
+
         doAtlasLayout: function () {
             if ( this.atlas.autoSize ) {
                 this.atlas.width = 128;

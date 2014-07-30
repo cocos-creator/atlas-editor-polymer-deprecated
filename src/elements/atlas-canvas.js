@@ -716,15 +716,8 @@
                 for ( var i = 0; i < this.selection.length; ++i ) {
                     this.atlas.remove(this.selection[i].data.sprite);
                 }
-
-                if ( this.atlas.autoSize ) {
-                    this.atlas.width = 128;
-                    this.atlas.height = 128;
-                    this.atlas.sort();
-                    this.atlas.layout();
-                }
                 this.selection = [];
-                this.rebuildAtlas(false);
+                this.fire('delete');
 
                 // return false to prevent default browser behavior
                 // and stop event from bubbling

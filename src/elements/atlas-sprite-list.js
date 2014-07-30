@@ -34,10 +34,21 @@
                 return a.name.localeCompare( b.name );
             } );
 
+            var ondelete = function (event) {
+                var itemEL = event.target;
+                this.atlas.remove(itemEL.value);
+                listRoot.removeChild(itemEL);
+
+                event.stopPropagation();
+
+                this.fire('delete');
+            }.bind(this); 
+
             for ( var i = 0; i < sortedList.length; ++i ) {
-                var item = sortedList[i];
+                var sprite = sortedList[i];
                 var el = new AtlasSpriteItem();
-                el.value = item;
+                el.addEventListener( "delete", ondelete );
+                el.value = sprite;
                 listRoot.appendChild(el);
             }
         },
@@ -104,11 +115,6 @@
             // this.clearSelect();
             this.focused = false;
             this.classList.toggle('focused', this.focused);
-        },
-
-        deleteAction: function (event, detail, sender) {
-            console.log("deleteAction");
-            event.stopPropagation();
         },
 
         clickAction: function (event) {

@@ -18,6 +18,7 @@
         elementBgColor="{{canvasSettings.elementBgColor}}"
         elementSelectColor="{{canvasSettings.elementSelectColor}}"
         on-import="{{importAction}}"
+        on-delete="{{deleteSpritesAction}}"
         >
         </atlas-canvas>
 </div>
@@ -76,6 +77,7 @@
         class="flex-1 flex-col flex-stretch" 
         atlas="{{atlas}}"
         selectedSprites="{{selection}}"
+        on-delete="{{deleteSpritesAction}}"
         >
     </atlas-sprite-list>
 </div>

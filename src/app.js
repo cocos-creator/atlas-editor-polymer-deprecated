@@ -100,3 +100,6 @@ if ( FIRE.isnw ) {
     //     menu.popup(e.originalEvent.x, e.originalEvent.y);
     // });
 }
+else if (FIRE.isas) {
+    // TODO: atom-shell
+}

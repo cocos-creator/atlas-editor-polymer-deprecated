@@ -116,7 +116,7 @@
                 var useZip = !FIRE.isnw;
                 return buildPng(useZip);
             });
-            if (FIRE.isnw) {
+            if (FIRE.isapp) {
                 requireAsync(selectedExporter)
                 .then(function (exporter) {
                     loadingMask.hide(); // here have to hide the mask temporary,
@@ -137,8 +137,13 @@
                         });
                     });
                 }).then(function (dataPath) {
-                    var nwgui = require('nw.gui');
-                    nwgui.Shell.showItemInFolder(dataPath);
+                    if (FIRE.isnw) {
+                        var nwgui = require('nw.gui');
+                        nwgui.Shell.showItemInFolder(dataPath);
+                    }
+                    else if (FIRE.isas) {
+                        // TODO: atom-shell's shell browser
+                    }
                     // finished
                     loadingMask.hide();
                 });

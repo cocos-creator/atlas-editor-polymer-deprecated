@@ -1,6 +1,6 @@
 ﻿// setup requirejs
 requirejs.config({
-    //baseUrl: "../",
+    baseUrl: FIRE.isnw ? "" : "../",
     paths: {
         // exporters
         'exporter-cocos2d': 'exporters/cocos2d/index',
@@ -40,7 +40,7 @@ var requireAsync = function () {
                       reject(error);
                   });
     });
-}
+};
 
 // pre-load exporters
 requireAsync(

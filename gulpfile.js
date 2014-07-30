@@ -86,7 +86,7 @@ gulp.task('js', function() {
 });
 
 // js-no-uglify
-gulp.task('js-no-uglify', function() {
+gulp.task('js-dev', function() {
     return gulp.src(paths.js, {base: 'src'})
     .pipe(gulp.dest('bin'))
     ;
@@ -117,29 +117,24 @@ var task_version = function () {
 };
 
 gulp.task('version', ['js'], task_version);
-gulp.task('version-no-uglify', ['js-no-uglify'], task_version);
+gulp.task('version-dev', ['js-dev'], task_version);
 
 // html
-gulp.task('build-html', ['cp-html', 'css', 'version-no-uglify'], function() {
-    return gulp.src('bin/app.html')
-    .pipe(vulcanize({
-        dest: 'bin',
-        inline: true,
-        strip: true,
-    }))
-    .pipe(gulp.dest('bin'))
-    ;
-});
-gulp.task('build-html-dev', ['cp-html', 'css', 'version-no-uglify'], function() {
-    return gulp.src('bin/app.html')
-    .pipe(vulcanize({
-        dest: 'bin',
-        inline: true,
-        strip: false,
-    }))
-    .pipe(gulp.dest('bin'))
-    ;
-});
+var task_build_html = function (strip) {
+    return function () {
+        return gulp.src('bin/app.html')
+        .pipe(vulcanize({
+            dest: 'bin',
+            inline: true,
+            strip: strip,
+        }))
+        .pipe(gulp.dest('bin'))
+        ;
+    }
+}
+
+gulp.task('build-html', ['cp-html', 'css', 'version'], task_build_html(true));
+gulp.task('build-html-dev', ['cp-html', 'css', 'version-dev'], task_build_html(false));
 
 // watch
 gulp.task('watch', function() {
@@ -147,7 +142,7 @@ gulp.task('watch', function() {
     gulp.watch(paths.ext_editor_ui, ['cp-editor-ui']).on ( 'error', gutil.log );
     gulp.watch(paths.img, ['cp-img']).on ( 'error', gutil.log );
     gulp.watch(paths.css, ['css', 'build-html-dev']).on ( 'error', gutil.log );
-    gulp.watch(paths.js, ['version-no-uglify', 'build-html-dev']).on ( 'error', gutil.log );
+    gulp.watch(paths.js, ['build-html-dev']).on ( 'error', gutil.log );
     gulp.watch(paths.html, ['build-html-dev']).on ( 'error', gutil.log );
 });
 

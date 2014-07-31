@@ -1,8 +1,8 @@
 {
-  "name": "simple-server",
+  "name": "Fireball-x Atlas Editor",
   "version": "0.0.3",
-  "description": "Simple Web Server",
-  "homepage": "http://jwu.github.io",
+  "description": "Fireball-x Atlas Editor",
+  "homepage": "http://github.com/fireball-x/atlas-editor",
   "license": "MIT",
   "licenseUrl": "http://opensource.org/licenses/MIT",
   "main": "index.html",

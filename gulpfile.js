@@ -15,9 +15,9 @@ var paths = {
         '../core/bin/**/*.js',
     ],
     ext_editor_ui: [ 
-        '../editor-ui-polymer/bin/editor-ui.css',
-        '../editor-ui-polymer/bin/editor-ui.html',
-        '../editor-ui-polymer/bin/img/**/*.png',
+        '../editor-ui/bin/editor-ui.css',
+        '../editor-ui/bin/editor-ui.html',
+        '../editor-ui/bin/img/**/*.png',
     ],
     img: 'src/img/**/*',
     css: 'src/**/*.styl',
@@ -45,7 +45,7 @@ gulp.task('cp-editor-ui', function() {
 
     // deferred 1 second to prevent copy editor-ui.html while it is in the building phase
     setTimeout(function () {
-        gulp.src(paths.ext_editor_ui, {base: '../editor-ui-polymer/bin/'})
+        gulp.src(paths.ext_editor_ui, {base: '../editor-ui/bin/'})
         .pipe(gulp.dest('ext/fire-editor-ui'))
         ;
         deferred.resolve();

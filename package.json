@@ -9,7 +9,7 @@
   "window": {
     "toolbar": false,
     "width": 1280,
-    "height": 720
+    "height": 900
   },
   "dependencies": {},
   "devDependencies": {
@@ -19,6 +19,7 @@
     "gulp-clean": "",
     "gulp-concat": "",
     "gulp-jshint": "",
+    "gulp-rename": "^1.2.0",
     "gulp-stylus": "",
     "gulp-uglify": "",
     "gulp-util": "",

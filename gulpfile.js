@@ -7,6 +7,7 @@ var stylish = require('jshint-stylish');
 var uglify = require('gulp-uglify');
 var stylus = require('gulp-stylus');
 var vulcanize = require('gulp-vulcanize');
+var rename = require('gulp-rename');
 var Q = require('q');
 var es = require('event-stream');
 
@@ -24,6 +25,11 @@ var paths = {
     html: 'src/**/*.html',
     js: [
         'src/**/*.js',
+    ],
+    minify_3rd: [
+        '3rd/bluebird.js',
+        '3rd/requirejs-text.node.js',
+        'ext/web-animations-js/web-animations.js',
     ],
 };
 
@@ -119,6 +125,18 @@ var task_version = function () {
 gulp.task('version', ['js'], task_version);
 gulp.task('version-dev', ['js-dev'], task_version);
 
+// minify third
+gulp.task('minify-3rd', function() {
+    return gulp.src(paths.minify_3rd/*, {base: './'}*/)
+    .pipe(uglify())
+    .pipe(rename(function (path) {
+        //path
+        path.extname = ".min" + path.extname;
+    }))
+    .pipe(gulp.dest('3rd'))
+    ;
+});
+
 // html
 var task_build_html = function (strip) {
     return function () {
@@ -150,4 +168,4 @@ gulp.task('watch', function() {
 gulp.task('cp-all', ['cp-core', 'cp-editor-ui', 'cp-img', 'cp-html' ] );
 gulp.task('dev', ['cp-all', 'build-html-dev' ] );
 gulp.task('default', ['cp-all', 'build-html' ] );
-gulp.task('all', ['dev'] );
+gulp.task('all', ['default', 'minify-3rd'] );

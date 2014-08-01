@@ -1,11 +1,11 @@
 ﻿// setup requirejs
 requirejs.config({
-    baseUrl: FIRE.isnw ? "" : "../",
+    baseUrl: FIRE.isapp ? "" : "../",
     paths: {
         // exporters
         'exporter-cocos2d': 'exporters/cocos2d/index',
         // RequireJS plugins
-        'text': '3rd/requirejs-text.node',
+        'text': '3rd/requirejs-text.node.min',
         // others
         'libpng': "bin/libpngWrapper",
         'jszip': "ext/jszip/dist/jszip.min",

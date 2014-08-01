@@ -3,7 +3,8 @@
   "version": "0.0.3",
   "homepage": "https://github.com/fireball-x/atlas-editor",
   "authors": [
-    "Johnny Wu <KarasAya@gmail.com>"
+    "Johnny Wu <KarasAya@gmail.com>",
+    "Jare Guo <jare.guo@gmail.com>"
   ],
   "description": "Atlas Editor",
   "license": "MIT",

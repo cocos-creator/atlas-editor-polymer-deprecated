@@ -13,7 +13,7 @@ requirejs.config({
         'libpng': "bin/libpngWrapper",
         'jszip': "ext/jszip/dist/jszip.min",
         'dust': "ext/dustjs-linkedin/dist/dust-full.min",
-        'filesaver': "ext/FileSaver/FileSaver",
+        'filesaver': "3rd/FileSaver.min",
     },
 });
 

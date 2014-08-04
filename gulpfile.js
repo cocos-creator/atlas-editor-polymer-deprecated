@@ -32,6 +32,7 @@ var paths = {
         '3rd/bluebird.js',
         '3rd/requirejs-text.node.js',
         'ext/web-animations-js/web-animations.js',
+        'ext/FileSaver/FileSaver.js',
     ],
     dist: {
         cp_3rd: [
@@ -56,12 +57,10 @@ var paths = {
         ],
         cp_exporter: 'exporters/**/*',
         cp_deferred_lib: [
-            // 以下对应requireIndex.js里面的配置
-            '3rd/requirejs-text.node.min.js',
+            // 以下对应requireIndex.js里面的配置(除3rd外)
             'bin/libpngWrapper.js',
             'ext/jszip/dist/jszip.min.js',
             'ext/dustjs-linkedin/dist/dust-full.min.js',
-            'ext/FileSaver/FileSaver.js',
         ],
         cp_nw: [
             'index.html',

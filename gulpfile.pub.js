@@ -58,29 +58,29 @@ gulp.task('clean', function() {
 });
 
 // publish
-gulp.task('cp-dist', function() {
+gulp.task('build-nw', function () {
     var src = [].concat(
         paths.ext,
         paths.exporter,
-        paths.bin
+        paths.bin,
+        paths.nw
     );
-
     return gulp.src(src, { base: './'})
-           .pipe(gulp.dest(paths.output_nw))
-           .pipe(gulp.dest(paths.output_web))
-           ;
-});
-
-gulp.task('build-nw', ['cp-dist'], function () {
-    return gulp.src(paths.nw, { base: './'})
            .pipe(gulp.dest(paths.output_nw))
            ;
     //return gulp.src('src/*')
     //.pipe(zip('archive.zip'));
 });
 
-gulp.task('build-web', ['cp-dist'], function () {
-    return gulp.src(paths.web, { base: './'})
+gulp.task('build-web', function () {
+    var src = [].concat(
+        paths.ext,
+        paths.exporter,
+        paths.bin,
+        paths.web
+    );
+
+    return gulp.src(src, { base: './'})
            .pipe(gulp.dest(paths.output_web))
            ;
 });

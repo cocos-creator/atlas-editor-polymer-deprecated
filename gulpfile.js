@@ -11,7 +11,7 @@ var uglify = require('gulp-uglify');
 var stylus = require('gulp-stylus');
 var vulcanize = require('gulp-vulcanize');
 var rename = require('gulp-rename');
-var zip = require('gulp-zip');
+// var zip = require('gulp-zip');
 
 
 var paths = {
@@ -24,8 +24,8 @@ var paths = {
         '../editor-ui/bin/img/**/*.png',
     ],
     img: 'src/img/**/*',
-    cssToBuild: 'src/app/**/*.styl',
-    htmlToBuild: 'src/app/**/*.html',
+    css_in_app: 'src/app/**/*.styl',
+    html_in_app: 'src/app/**/*.html',
     js_in_app: 'src/app/**/*.js',
     js:        'src/*.js',
     minify_3rd: [
@@ -120,7 +120,7 @@ gulp.task('cp-img', ['clean'], function() {
 });
 
 gulp.task('cp-html', ['clean'], function() {
-    return gulp.src(paths.htmlToBuild, {base: paths.htmlToBuild.split('*')[0]} )
+    return gulp.src(paths.html_in_app, {base: paths.html_in_app.split('*')[0]} )
     .pipe(gulp.dest('bin'));
 });
 
@@ -132,7 +132,7 @@ gulp.task('cp-all', ['cp-core', 'cp-editor-ui', 'cp-img', 'cp-html' ] );
 
 // css
 gulp.task('css', ['clean'], function() {
-    return gulp.src(paths.cssToBuild)
+    return gulp.src(paths.css_in_app)
     .pipe(stylus({
         compress: true,
         include: 'src'
@@ -212,8 +212,8 @@ var task_build_html = function (strip) {
             strip: strip,
         }))
         .pipe(gulp.dest(dest));
-    }
-}
+    };
+};
 
 gulp.task('build-html', ['cp-html', 'css', 'js'], task_build_html(true));
 gulp.task('build-html-dev', ['cp-html', 'css', 'js-dev'], task_build_html(false));
@@ -267,9 +267,9 @@ gulp.task('watch', function() {
     gulp.watch(paths.ext_core, ['cp-core']).on ( 'error', gutil.log );
     gulp.watch(paths.ext_editor_ui, ['cp-editor-ui']).on ( 'error', gutil.log );
     gulp.watch(paths.img, ['cp-img']).on ( 'error', gutil.log );
-    gulp.watch(paths.cssToBuild, ['css', 'build-html-dev']).on ( 'error', gutil.log );
-    gulp.watch(paths.js, ['build-html-dev']).on ( 'error', gutil.log );
-    gulp.watch(paths.htmlToBuild, ['build-html-dev']).on ( 'error', gutil.log );
+    gulp.watch(paths.css_in_app, ['css', 'build-html-dev']).on ( 'error', gutil.log );
+    gulp.watch(paths.js_in_app, ['build-html-dev']).on ( 'error', gutil.log );
+    gulp.watch(paths.html_in_app, ['build-html-dev']).on ( 'error', gutil.log );
 });
 
 // tasks

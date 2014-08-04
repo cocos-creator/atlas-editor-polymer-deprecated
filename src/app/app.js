@@ -48,7 +48,7 @@ if ( FIRE.isnw ) {
             // F12
             case 123:
                 nativeWin.showDevTools(); 
-            e.stopPropagation();
+                e.stopPropagation();
             break;
 
             // F5

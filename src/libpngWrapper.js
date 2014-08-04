@@ -13,7 +13,7 @@ var Module = {
     'printErr': console.error,
 };
 
-define(["3rd/pngcrush.min.fixed"], function () {
+define(["ext/pngcrush.min.fixed"], function () {
     // C definitions
     var NULL = 0;
     var init = function () {

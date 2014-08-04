@@ -1,6 +1,6 @@
 ﻿// setup requirejs
 requirejs.config({
-    baseUrl: FIRE.isapp ? "" : "../",
+    baseUrl: FIRE.isapp ? "" : "./",
     paths: {
         // exporters
         'exporter-cocos2d': 'exporters/cocos2d/index',
@@ -8,12 +8,12 @@ requirejs.config({
         // 以下需手动添加到gulp里，打包时才会包含进去
 
         // RequireJS plugins
-        'text': '3rd/requirejs-text.node.min',
+        'text': 'ext/requirejs-text.node.min',
         // others
         'libpng': "bin/libpngWrapper",
         'jszip': "ext/jszip/dist/jszip.min",
         'dust': "ext/dustjs-linkedin/dist/dust-full.min",
-        'filesaver': "3rd/FileSaver.min",
+        'filesaver': "ext/FileSaver.min",
     },
 });
 

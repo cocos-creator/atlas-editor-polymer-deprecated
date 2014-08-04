@@ -4,6 +4,9 @@ requirejs.config({
     paths: {
         // exporters
         'exporter-cocos2d': 'exporters/cocos2d/index',
+
+        // 以下需手动添加到gulp里，打包时才会包含进去
+
         // RequireJS plugins
         'text': '3rd/requirejs-text.node.min',
         // others

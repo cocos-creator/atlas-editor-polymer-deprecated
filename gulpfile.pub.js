@@ -33,7 +33,8 @@ var paths = {
     exporter: 'exporters/**/*',
     bin: [
         'bin/**/*',
-        '!bin/app/app.js',
+        '!bin/app/*.js',
+        '!bin/app/elements/',
         '!bin/app/elements/**/*',
     ],
     nw: [

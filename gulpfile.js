@@ -59,7 +59,7 @@ gulp.task('cp-editor-ui', function() {
         .pipe(gulp.dest('ext/fire-editor-ui'))
         ;
         deferred.resolve();
-    }, 1000);
+    }, process.platform === 'win32' ? 0 : 1000);
 
     return deferred.promise;
 });
@@ -117,8 +117,6 @@ var writeVersion = function (filename) {
         callback(null, file);
     });
 };
-// gulp.task('version', ['js'], writeVersion);
-// gulp.task('version-dev', ['js-dev'], writeVersion);
 
 // js
 gulp.task('js', function() {

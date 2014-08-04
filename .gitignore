@@ -42,10 +42,10 @@ node_modules/
 bower_components/
 bin/
 /ext/
+publish/
 
 # scripts
 Build.bat
 Open.bat
 LaunchServer.bat
 Install.bat
-publish/

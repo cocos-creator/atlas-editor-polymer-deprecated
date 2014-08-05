@@ -36,7 +36,7 @@ var paths = {
 
 // clean
 gulp.task('clean', function() {
-    return gulp.src('bin/', {read: false})
+    return gulp.src('bin/*', {read: false})
     .pipe(clean());
 });
 

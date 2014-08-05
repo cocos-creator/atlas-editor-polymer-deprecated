@@ -53,7 +53,7 @@ var paths = {
 
 // clean
 gulp.task('clean', function() {
-    return gulp.src(paths.output, {read: false})
+    return gulp.src(paths.output + '*', {read: false})
            .pipe(clean())
            ;
 });

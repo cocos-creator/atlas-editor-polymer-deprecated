@@ -120,9 +120,12 @@
                 requireAsync(selectedExporter)
                 .then(function (exporter) {
                     loadingMask.hide(); // here have to hide the mask temporary,
-                                        // because it seems like that in node-webkit, we could not get any callback while users canceled the file dialog
+                    // because it seems like that in node-webkit, we could not get any callback while users canceled the file dialog
                     return new Promise(function (resolve, reject) {
                         FIRE.getSavePath(exporter.fileName, 'Key_ExportAtlas', function (dataPath) {
+                            if (!dataPath) {
+                                return;
+                            }
                             loadingMask.show();
 
                             var Path = require('path');
@@ -136,14 +139,9 @@
                             });
                         });
                     });
-                }).then(function (dataPath) {
-                    if (FIRE.isnw) {
-                        var nwgui = require('nw.gui');
-                        nwgui.Shell.showItemInFolder(dataPath);
-                    }
-                    else if (FIRE.isas) {
-                        // TODO: atom-shell's shell browser
-                    }
+                })
+                .then(function (dataPath) {
+                    FIRE.showItemInFolder(dataPath);
                     // finished
                     loadingMask.hide();
                 });

@@ -37,6 +37,11 @@ var paths = {
         '!bin/app/elements/',
         '!bin/app/elements/**/*',
     ],
+    as: [
+        'main.js',
+        'index.html',
+        'package.json',
+    ],
     nw: [
         'index.html',
         'package.json',
@@ -47,6 +52,7 @@ var paths = {
     ],
 
     output: 'publish/',
+    output_as: 'publish/as',
     output_nw: 'publish/nw',
     output_web: 'publish/web',
 };
@@ -73,6 +79,18 @@ gulp.task('build-nw', function () {
     //.pipe(zip('archive.zip'));
 });
 
+gulp.task('build-as', function () {
+    var src = [].concat(
+        paths.ext,
+        paths.exporter,
+        paths.bin,
+        paths.as
+    );
+    return gulp.src(src, { base: './'})
+           .pipe(gulp.dest(paths.output_as))
+           ;
+});
+
 gulp.task('build-web', function () {
     var src = [].concat(
         paths.ext,
@@ -80,7 +98,6 @@ gulp.task('build-web', function () {
         paths.bin,
         paths.web
     );
-
     return gulp.src(src, { base: './'})
            .pipe(gulp.dest(paths.output_web))
            ;
@@ -91,4 +108,4 @@ gulp.task('build-web', function () {
 /////////////////////////////////////////////////////////////////////////////
 
 // short commands
-gulp.task('default', ['build-nw', 'build-web' ] );
+gulp.task('default', ['build-as', 'build-web' ] );

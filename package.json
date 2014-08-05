@@ -5,12 +5,7 @@
   "homepage": "http://github.com/fireball-x/atlas-editor",
   "license": "MIT",
   "licenseUrl": "http://opensource.org/licenses/MIT",
-  "main": "index.html",
-  "window": {
-    "toolbar": false,
-    "width": 1280,
-    "height": 900
-  },
+  "main": "main.js",
   "dependencies": {},
   "devDependencies": {
     "event-stream": "^3.1.7",

@@ -171,6 +171,7 @@ gulp.task('build-html-dev', ['cp-html', 'css', 'js-dev'], build_html(false));
 gulp.task('cp-all', ['cp-core', 'cp-editor-ui', 'cp-img', 'cp-html', 'cp-3rd'] );
 gulp.task('dev', ['cp-all', 'build-html-dev' ] );
 gulp.task('default', ['cp-all', 'ext-min', 'build-html' ] );
+gulp.task('all', ['dev' ] );
 
 // watch
 gulp.task('watch', function() {

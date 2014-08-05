@@ -33,7 +33,8 @@ var paths = {
     exporter: 'exporters/**/*',
     bin: [
         'bin/**/*',
-        '!bin/app/app.js',
+        '!bin/app/*.js',
+        '!bin/app/elements/',
         '!bin/app/elements/**/*',
     ],
     nw: [
@@ -52,7 +53,7 @@ var paths = {
 
 // clean
 gulp.task('clean', function() {
-    return gulp.src(paths.output, {read: false})
+    return gulp.src(paths.output + '*', {read: false})
            .pipe(clean())
            ;
 });

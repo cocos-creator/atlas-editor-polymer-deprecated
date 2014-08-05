@@ -40,7 +40,7 @@
                 { name: '4096', value: 4096 },
             ];
             this.canvasSettings = new AtlasCanvasSettings();
-            this.version = 'v<%=gulp_version%> (<%=gulp_build%>)';
+            this.version = 'v<%=gulp_version%>+<%=gulp_build%>';
             this.selection = [];
         },
 

@@ -26,5 +26,5 @@ copy js/browser/bluebird.js ../../3rd
 
 ### how to build 3rd/*.min.js ###
 ```
-grunt minify-3rd
+gulp ext-min
 ```

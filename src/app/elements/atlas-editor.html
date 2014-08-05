@@ -42,7 +42,7 @@
         <fire-ui-custom-prop name="Build Color">                                      
             <fire-ui-checkbox value="{{atlas.customBuildColor}}"></fire-ui-checkbox>   
             <span class="space"></span>                                                
-            <fire-ui-color class="flex-1" value="{{atlas.buildColor}}"></fire-ui-color>
+            <fire-ui-color flex-1 value="{{atlas.buildColor}}"></fire-ui-color>
         </fire-ui-custom-prop>                                                        
     </fire-ui-section>
 
@@ -54,7 +54,7 @@
         <fire-ui-custom-prop name="Background">                                      
             <fire-ui-checkbox value="{{canvasSettings.customBackgroundColor}}"></fire-ui-checkbox>   
             <span class="space"></span>                                                
-            <fire-ui-color class="flex-1" value="{{canvasSettings.backgroundColor}}"></fire-ui-color>
+            <fire-ui-color flex-1 value="{{canvasSettings.backgroundColor}}"></fire-ui-color>
         </fire-ui-custom-prop>                                                        
         <fire-ui-prop name="Element Background" value="{{canvasSettings.elementBgColor}}"></fire-ui-prop>                          
         <fire-ui-prop name="Element Select" value="{{canvasSettings.elementSelectColor}}"></fire-ui-prop>                          
@@ -62,8 +62,8 @@
 
     <span class="space"></span>                                                                            
 
-    <div class="flex-1 flex-row">
-        <div class="flex-1"></div>
+    <div flex-1 flex-row>
+        <div flex-1></div>
         <fire-ui-button on-click="{{exportAction}}">Export Atlas</fire-ui-button> 
         <span class="space"></span>
         <fire-ui-button on-click="{{layoutAction}}">Layout</fire-ui-button>                                                             
@@ -71,10 +71,9 @@
     </div>
 </div>
 
-<div tabIndex="1" id="sprite-list-view" class="panel right sidebar flex-col flex-stretch">
+<div flex-col flex-stretch tabIndex="1" id="sprite-list-view" class="panel right sidebar">
     <div class="title">Sprites</div>
-    <atlas-sprite-list 
-        class="flex-1 flex-col flex-stretch" 
+    <atlas-sprite-list flex-1 flex-col flex-stretch 
         atlas="{{atlas}}"
         selectedSprites="{{selection}}"
         on-delete="{{deleteSpritesAction}}"

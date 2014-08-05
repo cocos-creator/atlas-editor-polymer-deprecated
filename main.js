@@ -10,8 +10,7 @@ var mainWindow = null;
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin')
-        app.quit();
+    app.quit();
 });
 
 // This method will be called when atom-shell has done everything
@@ -21,7 +20,7 @@ app.on('ready', function () {
     mainWindow = new BrowserWindow({ width: 1280, height: 900 });
 
     // and load the index.html of the app.
-    mainWindow.loadUrl(__dirname + "/index.html");
+    mainWindow.loadUrl( "file://" + __dirname + "/index.html");
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {

@@ -33,6 +33,40 @@ document.addEventListener( "contextmenu", function (event) {
     event.stopPropagation();
 } );
 
+if (FIRE.isnw) {
+    var nwgui = require('nw.gui');
+    var nativeWin = nwgui.Window.get();
+}
+else if (FIRE.isas) {
+    var remote = require('remote');
+}
+
+document.onkeydown = function (e) { 
+    switch ( e.keyCode ) {
+        // F12
+        case 123:
+            if (FIRE.isnw) {
+                nativeWin.showDevTools();
+                e.stopPropagation();
+            }
+            else if (FIRE.isas) {
+                var win = remote.getCurrentWindow();
+                if (win) {
+                    win.toggleDevTools();
+                    e.stopPropagation();
+                }
+            }
+        break;
+
+        // F5
+        case 116:
+            if (FIRE.isnw) {
+                nativeWin.reload();
+            }
+        break;
+    }
+};
+
 if ( FIRE.isnw ) {
     var nwgui = require('nw.gui');
     var nativeWin = nwgui.Window.get();
@@ -42,21 +76,6 @@ if ( FIRE.isnw ) {
         nativeMenuBar.createMacBuiltin("Atlas Editor");
         nativeWin.menu = nativeMenuBar;
     }
-
-    document.onkeydown = function (e) { 
-        switch ( e.keyCode ) {
-            // F12
-            case 123:
-                nativeWin.showDevTools(); 
-                e.stopPropagation();
-            break;
-
-            // F5
-            case 116:
-                nativeWin.reload();
-            break;
-        }
-    };
 
     // TODO: node-webkit custom contextmenu
     // function Menu(cutLabel, copyLabel, pasteLabel) {
@@ -99,7 +118,4 @@ if ( FIRE.isnw ) {
     //     e.preventDefault();
     //     menu.popup(e.originalEvent.x, e.originalEvent.y);
     // });
-}
-else if (FIRE.isas) {
-    // TODO: atom-shell
 }

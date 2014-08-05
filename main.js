@@ -1,8 +1,9 @@
 ﻿var app = require('app');  // Module to control application life.
 var BrowserWindow = require('browser-window');  // Module to create native browser window.
+//var globalShortcut = require('global-shortcut');
 
 // Report crashes to our server.
-require('crash-reporter').start();
+//require('crash-reporter').start();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
@@ -32,3 +33,53 @@ app.on('ready', function () {
 
     //mainWindow.openDevTools();
 });
+
+//globalShortcut.register('F12', function () {
+//    var win = BrowserWindow.getFocusedWindow();
+//    if (win) {
+//        win.toggleDevTools();
+//    }
+//});
+
+if (process.platform === 'darwin') {
+    // build menu
+    var Menu = require('menu');
+    var template = [
+        {
+            label: 'Atlas Editor',
+            submenu: [
+                {
+                    label: 'About Fireball-x',
+                    selector: 'orderFrontStandardAboutPanel:'
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    label: 'Hide Fireball-x',
+                    accelerator: 'CmdOrCtrl+H',
+                    selector: 'hide:'
+                },
+                {
+                    label: 'Hide Others',
+                    accelerator: 'CmdOrCtrl+Shift+H',
+                    selector: 'hideOtherApplications:'
+                },
+                {
+                    label: 'Show All',
+                    selector: 'unhideAllApplications:'
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    label: 'Quit',
+                    accelerator: 'CmdOrCtrl+Q',
+                    click: function () { app.quit(); }
+                }
+            ]
+        }
+    ];
+    menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
+}

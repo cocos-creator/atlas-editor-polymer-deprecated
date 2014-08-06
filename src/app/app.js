@@ -63,6 +63,12 @@ document.onkeydown = function (e) {
             if (FIRE.isnw) {
                 nativeWin.reload();
             }
+            else if (FIRE.isas) {
+                var win = remote.getCurrentWindow();
+                if (win) {
+                    win.reload();
+                }
+            }
         break;
     }
 };

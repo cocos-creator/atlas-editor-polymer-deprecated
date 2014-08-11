@@ -37,9 +37,6 @@ if (FIRE.isnw) {
     var nwgui = require('nw.gui');
     var nativeWin = nwgui.Window.get();
 }
-else if (FIRE.isas) {
-    var remote = require('remote');
-}
 
 document.onkeydown = function (e) { 
     switch ( e.keyCode ) {
@@ -49,25 +46,12 @@ document.onkeydown = function (e) {
                 nativeWin.showDevTools();
                 e.stopPropagation();
             }
-            else if (FIRE.isas) {
-                var win = remote.getCurrentWindow();
-                if (win) {
-                    win.toggleDevTools();
-                    e.stopPropagation();
-                }
-            }
         break;
 
         // F5
         case 116:
             if (FIRE.isnw) {
                 nativeWin.reload();
-            }
-            else if (FIRE.isas) {
-                var win = remote.getCurrentWindow();
-                if (win) {
-                    win.reload();
-                }
             }
         break;
     }

@@ -6,6 +6,11 @@
   "license": "MIT",
   "licenseUrl": "http://opensource.org/licenses/MIT",
   "main": "index.html",
+  "window": {
+      "toolbar": false,
+      "width": 1280,
+      "height": 720
+  },
   "dependencies": {},
   "devDependencies": {
     "event-stream": "^3.1.7",

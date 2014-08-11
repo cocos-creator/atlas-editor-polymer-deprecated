@@ -137,7 +137,6 @@ gulp.task('js-dev', function() {
     ;
 });
 
-
 // minify 3rd libraries from their source
 gulp.task('ext-min', ['cp-3rd'], function() {
     return gulp.src(paths.minify_ext)

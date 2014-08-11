@@ -33,7 +33,7 @@ document.addEventListener( "contextmenu", function (event) {
     event.stopPropagation();
 } );
 
-if (FIRE.isnw) {
+if (FIRE.isNw) {
     var nwgui = require('nw.gui');
     var nativeWin = nwgui.Window.get();
 }
@@ -45,7 +45,7 @@ document.onkeydown = function (e) {
     switch ( e.keyCode ) {
         // F12
         case 123:
-            if (FIRE.isnw) {
+            if (FIRE.isNw) {
                 nativeWin.showDevTools();
                 e.stopPropagation();
             }
@@ -60,7 +60,7 @@ document.onkeydown = function (e) {
 
         // F5
         case 116:
-            if (FIRE.isnw) {
+            if (FIRE.isNw) {
                 nativeWin.reload();
             }
             else if (FIRE.isas) {
@@ -73,11 +73,11 @@ document.onkeydown = function (e) {
     }
 };
 
-if ( FIRE.isnw ) {
+if ( FIRE.isNw ) {
     var nwgui = require('nw.gui');
     var nativeWin = nwgui.Window.get();
 
-    if (FIRE.isdarwin) {
+    if (FIRE.isDarwin) {
         var nativeMenuBar = new nwgui.Menu({ type: "menubar" });
         nativeMenuBar.createMacBuiltin("Atlas Editor");
         nativeWin.menu = nativeMenuBar;

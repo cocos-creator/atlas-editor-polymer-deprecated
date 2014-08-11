@@ -1,6 +1,6 @@
 ﻿// setup requirejs
 requirejs.config({
-    baseUrl: FIRE.isapp ? "" : "./",
+    baseUrl: FIRE.isApp ? "" : "./",
     paths: {
         // exporters
         'exporter-cocos2d': 'exporters/cocos2d/index',

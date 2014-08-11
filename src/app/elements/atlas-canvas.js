@@ -708,7 +708,7 @@
         _focusAction: function ( event ) {
             if (!this.deleteKeys) {
                 this.deleteKeys = ['command+backspace', 'ctrl+backspace'];
-                if (!FIRE.isdarwin) {
+                if (!FIRE.isDarwin) {
                     this.deleteKeys.push('del');
                 }
             }

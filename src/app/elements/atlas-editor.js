@@ -113,10 +113,10 @@
 
             var maskFadeInDuration = 500;   // IE压缩png时会挂起浏览器，所以需要等mask渲染出来
             var buildPngPromise = Promise.delay(maskFadeInDuration).then(function () {
-                var useZip = !FIRE.isnw;
+                var useZip = !FIRE.isNw;
                 return buildPng(useZip);
             });
-            if (FIRE.isapp) {
+            if (FIRE.isApp) {
                 requireAsync(selectedExporter)
                 .then(function (exporter) {
                     loadingMask.hide(); // here have to hide the mask temporary,

@@ -2,6 +2,10 @@
     Polymer('atlas-sprite-item', {
         publish: {
             value: null,
+            selected: {
+                value: false,
+                reflect: true,
+            },
         },
 
         created: function () {
@@ -34,7 +38,6 @@
                 return;
 
             this.selected = true;
-            this.classList.toggle('selected', this.selected);
         },
 
         unselect: function () {
@@ -42,7 +45,6 @@
                 return;
 
             this.selected = false;
-            this.classList.toggle('selected', this.selected);
         },
     });
 })();

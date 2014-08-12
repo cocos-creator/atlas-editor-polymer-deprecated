@@ -241,6 +241,12 @@
             this.atlasCanvas.rebuildAtlas(false);
         },
 
+        resizedAction: function ( event ) {
+            this.atlasCanvas.resize( this.atlasCanvas.parentNode.clientWidth, 
+                                     this.atlasCanvas.parentNode.clientHeight );
+            event.stopPropagation();
+        },
+
         doAtlasLayout: function () {
             if ( this.atlas.autoSize ) {
                 this.atlas.width = 128;

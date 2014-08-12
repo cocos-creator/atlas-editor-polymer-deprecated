@@ -1,6 +1,5 @@
 :host {
     display: inline-block
-    width: 100%
     min-height: 21px
 
     #focus:focus {
@@ -8,27 +7,31 @@
     }
 
     #focus {
+        bgcolor = #444
+
         font-size: 12px
         white-space: nowrap
         padding: 3px 2px 3px 5px
         border-bottom: 1px solid black
 
-        background-color: #373737
+        background-color: bgcolor
         font-family: Helvetica,Arial,sans-serif
         cursor: default 
         color: #bdbdbd
 
         &:hover {
-            background-color: #555
+            background-color: bgcolor + 20%
         }
     }
 
-    &(.selected) {
+    &([selected]) {
+        bgcolor = #2865c7
+
         #focus {
-            background-color: #2865c7
+            background-color: bgcolor
 
             &:hover {
-                background-color: #5885f7
+                background-color: bgcolor + 20%
             }
         }
     }

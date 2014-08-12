@@ -8,78 +8,88 @@
 
 <loading-mask id="loadingMask"></loading-mask>
 
-<div id="workspace" class="workspace">
-    <atlas-canvas 
-        id="atlas-canvas" 
-        atlas="{{atlas}}"
-        selectedSprites="{{selection}}"
-        customBackgroundColor="{{canvasSettings.customBackgroundColor}}"
-        backgroundColor="{{canvasSettings.backgroundColor}}"
-        elementBgColor="{{canvasSettings.elementBgColor}}"
-        elementSelectColor="{{canvasSettings.elementSelectColor}}"
-        on-import="{{importAction}}"
-        on-delete="{{deleteSpritesAction}}"
-        >
-        </atlas-canvas>
-</div>
+<fire-ui-dock flex-1 flex-row flex-stretch
+    on-resized="{{resizedAction}}"
+    >
+    <fire-ui-dock-panel style="width: 320px">
+        <div name="Settings" class="settings" tabIndex="1" flex-1 flex-col flex-stretch>
+            <fire-ui-section text="Atlas">
+                <fire-ui-prop name="Auto Size" value="{{atlas.autoSize}}"></fire-ui-prop>                           
+                <fire-ui-prop name="Width" value="{{atlas.width}}" type="enum" enumList="{{sizeList}}"></fire-ui-prop>                           
+                <fire-ui-prop name="Height" value="{{atlas.height}}" type="enum" enumList="{{sizeList}}"></fire-ui-prop>                         
+                <fire-ui-prop name="Trim" value="{{atlas.trim}}"></fire-ui-prop>                         
+                <fire-ui-prop name="Trim Threshold" value="{{atlas.trimThreshold}}" type="int"></fire-ui-prop>                         
 
-<div tabIndex="1" id="settings" class="panel left sidebar">
-    <fire-ui-section text="Atlas">
-        <fire-ui-prop name="Auto Size" value="{{atlas.autoSize}}"></fire-ui-prop>                           
-        <fire-ui-prop name="Width" value="{{atlas.width}}" type="enum" enumList="{{sizeList}}"></fire-ui-prop>                           
-        <fire-ui-prop name="Height" value="{{atlas.height}}" type="enum" enumList="{{sizeList}}"></fire-ui-prop>                         
-        <fire-ui-prop name="Trim" value="{{atlas.trim}}"></fire-ui-prop>                         
-        <fire-ui-prop name="Trim Threshold" value="{{atlas.trimThreshold}}" type="int"></fire-ui-prop>                         
+                <fire-ui-prop name="Algorithm" value="{{atlas.algorithm}}" type="enum" enumType="FIRE.Atlas.Algorithm"></fire-ui-prop>                         
+                <fire-ui-prop name="Sort By" value="{{atlas.sortBy}}" type="enum" enumType="FIRE.Atlas.SortBy"></fire-ui-prop>                         
+                <fire-ui-prop name="Sort Order" value="{{atlas.sortOrder}}" type="enum" enumType="FIRE.Atlas.SortOrder"></fire-ui-prop>                         
+                <fire-ui-prop name="Allow Rotate" value="{{atlas.allowRotate}}"></fire-ui-prop>                         
 
-        <fire-ui-prop name="Algorithm" value="{{atlas.algorithm}}" type="enum" enumType="FIRE.Atlas.Algorithm"></fire-ui-prop>                         
-        <fire-ui-prop name="Sort By" value="{{atlas.sortBy}}" type="enum" enumType="FIRE.Atlas.SortBy"></fire-ui-prop>                         
-        <fire-ui-prop name="Sort Order" value="{{atlas.sortOrder}}" type="enum" enumType="FIRE.Atlas.SortOrder"></fire-ui-prop>                         
-        <fire-ui-prop name="Allow Rotate" value="{{atlas.allowRotate}}"></fire-ui-prop>                         
+                <fire-ui-prop name="Contour Bleed" value="{{atlas.useContourBleed}}"></fire-ui-prop>                         
+                <fire-ui-prop name="Padding Bleed" value="{{atlas.usePaddingBleed}}"></fire-ui-prop>                         
+                <fire-ui-prop name="Custom Padding" value="{{atlas.customPadding}}" type="int"></fire-ui-prop>                         
+                <fire-ui-custom-prop name="Build Color">                                      
+                    <fire-ui-checkbox value="{{atlas.customBuildColor}}"></fire-ui-checkbox>   
+                    <span class="space"></span>                                                
+                    <fire-ui-color flex-1 value="{{atlas.buildColor}}"></fire-ui-color>
+                </fire-ui-custom-prop>                                                        
+            </fire-ui-section>
 
-        <fire-ui-prop name="Contour Bleed" value="{{atlas.useContourBleed}}"></fire-ui-prop>                         
-        <fire-ui-prop name="Padding Bleed" value="{{atlas.usePaddingBleed}}"></fire-ui-prop>                         
-        <fire-ui-prop name="Custom Padding" value="{{atlas.customPadding}}" type="int"></fire-ui-prop>                         
-        <fire-ui-custom-prop name="Build Color">                                      
-            <fire-ui-checkbox value="{{atlas.customBuildColor}}"></fire-ui-checkbox>   
-            <span class="space"></span>                                                
-            <fire-ui-color flex-1 value="{{atlas.buildColor}}"></fire-ui-color>
-        </fire-ui-custom-prop>                                                        
-    </fire-ui-section>
+            <span class="space"></span>                                                                            
 
-    <span class="space"></span>                                                                            
+            <fire-ui-section text="Preview">                                                                                         
+                <fire-ui-prop name="Anti Aliasing" value="{{canvasSettings.smoothCanvas}}"></fire-ui-prop>
+                <fire-ui-prop name="Show Checkerboard" value="{{canvasSettings.showCheckerboard}}"></fire-ui-prop>
+                <fire-ui-custom-prop name="Background">                                      
+                    <fire-ui-checkbox value="{{canvasSettings.customBackgroundColor}}"></fire-ui-checkbox>   
+                    <span class="space"></span>                                                
+                    <fire-ui-color flex-1 value="{{canvasSettings.backgroundColor}}"></fire-ui-color>
+                </fire-ui-custom-prop>                                                        
+                <fire-ui-prop name="Element Background" value="{{canvasSettings.elementBgColor}}"></fire-ui-prop>                          
+                <fire-ui-prop name="Element Select" value="{{canvasSettings.elementSelectColor}}"></fire-ui-prop>                          
+            </fire-ui-section>                                                                                                       
 
-    <fire-ui-section text="PREVIEW">                                                                                         
-        <fire-ui-prop name="Anti Aliasing" value="{{canvasSettings.smoothCanvas}}"></fire-ui-prop>
-        <fire-ui-prop name="Show Checkerboard" value="{{canvasSettings.showCheckerboard}}"></fire-ui-prop>
-        <fire-ui-custom-prop name="Background">                                      
-            <fire-ui-checkbox value="{{canvasSettings.customBackgroundColor}}"></fire-ui-checkbox>   
-            <span class="space"></span>                                                
-            <fire-ui-color flex-1 value="{{canvasSettings.backgroundColor}}"></fire-ui-color>
-        </fire-ui-custom-prop>                                                        
-        <fire-ui-prop name="Element Background" value="{{canvasSettings.elementBgColor}}"></fire-ui-prop>                          
-        <fire-ui-prop name="Element Select" value="{{canvasSettings.elementSelectColor}}"></fire-ui-prop>                          
-    </fire-ui-section>                                                                                                       
+            <span class="space"></span>                                                                            
 
-    <span class="space"></span>                                                                            
+            <div flex-row>
+                <div flex-1></div>
+                <fire-ui-button on-click="{{exportAction}}">Export Atlas</fire-ui-button> 
+                <span class="space"></span>
+                <fire-ui-button on-click="{{layoutAction}}">Layout</fire-ui-button>                                                             
+                <span class="space"></span>
+            </div>
+        </div>
+    </fire-ui-dock-panel>
 
-    <div flex-1 flex-row>
-        <div flex-1></div>
-        <fire-ui-button on-click="{{exportAction}}">Export Atlas</fire-ui-button> 
-        <span class="space"></span>
-        <fire-ui-button on-click="{{layoutAction}}">Layout</fire-ui-button>                                                             
-        <span class="space"></span>
-    </div>
-</div>
+    <fire-ui-dock-panel flex-1>
+        <div name="Atlas" class="workspace">
+            <atlas-canvas 
+                id="atlas-canvas" 
+                atlas="{{atlas}}"
+                selectedSprites="{{selection}}"
+                customBackgroundColor="{{canvasSettings.customBackgroundColor}}"
+                backgroundColor="{{canvasSettings.backgroundColor}}"
+                elementBgColor="{{canvasSettings.elementBgColor}}"
+                elementSelectColor="{{canvasSettings.elementSelectColor}}"
+                on-import="{{importAction}}"
+                on-delete="{{deleteSpritesAction}}"
+                >
+                </atlas-canvas>
+        </div>
+    </fire-ui-dock-panel>
 
-<div flex-col flex-stretch tabIndex="1" id="sprite-list-view" class="panel right sidebar">
-    <div class="title">Sprites</div>
-    <atlas-sprite-list flex-1 flex-col flex-stretch 
-        atlas="{{atlas}}"
-        selectedSprites="{{selection}}"
-        on-delete="{{deleteSpritesAction}}"
-        >
-    </atlas-sprite-list>
-</div>
+
+    <fire-ui-dock-panel style="width: 240px">
+        <div id="sprite-list-view" name="Sprites" tabIndex="1" flex-1 flex-col flex-stretch>
+            <atlas-sprite-list flex-1 flex-col flex-stretch 
+                atlas="{{atlas}}"                           
+                selectedSprites="{{selection}}"             
+                on-delete="{{deleteSpritesAction}}"         
+                >                                           
+            </atlas-sprite-list>                            
+        </div>
+    </fire-ui-dock-panel>
+</fire-ui-dock>
 
 </template>
 

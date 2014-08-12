@@ -2,48 +2,42 @@
     box-sizing: border-box
     font-size: 12px
     font-family: Helvetica,Arial,sans-serif
-    background-color: #2e2e2e
+
+    margin-top: 2px; 
+
+    color: #bdbdbd
+    box-shadow: inset 0 0 8px 2px rgba(0,0,0,0.2); 
+    border: 1px solid black; 
+    background: #333;
 
     &>#focus:focus {
         outline: none
     }
 
     &>#focus {
-        flex: 1 1 auto
-        border: 1px solid black
         overflow-x: hidden
         overflow-y: auto
 
-        color: #bdbdbd
-        background-color: #171717
-
         &::-webkit-scrollbar {
-            height: 8px
-            width: 8px
+            height: 5px;
+            width: 5px;
         }
         &::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.2)
-            border: 1px solid #999
-            border-radius: 1px
+            border-top: 2px solid rgba(12,112,200,1.0);
+            border-bottom: 2px solid rgba(12,112,200,1.0);
 
-            &:hover {
-                background: rgba(255,255,255,0.4)
-                border: 1px solid #aaa
-            }
+            background: #171717;
         }
         &::-webkit-scrollbar-track {
-            background-clip: padding-box
-            background-color: rgba(255,255,255,0.1)
-            border-left: 1px solid black
+            background-color: #444;
+            border-left: 1px solid #171717;
         }
         &::-webkit-scrollbar-button {
-            height: 0
-            width: 0
+            height: 0;
+            width: 0;
         }
         &::-webkit-scrollbar-corner {
-            background-color: #171717
+            background-color: #171717;
         }
-
-        box-shadow: inset 0px 0px 4px 1px rgba(0,0,0,0.2)
     }
 }

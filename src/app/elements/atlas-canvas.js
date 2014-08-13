@@ -174,7 +174,7 @@
                 if (rightButton) {
                     self.draggingCanvas = true;
                     canvasEL.style.cursor = 'move';
-                    FIRE.addDragGhost("move");
+                    EditorUI.addDragGhost("move");
                 }
 
                 // process rect select 
@@ -188,7 +188,7 @@
                             if ( self.isSelected(event.item) ) {
                                 self.draggingItems = true;
                                 canvasEL.style.cursor = 'pointer';
-                                FIRE.addDragGhost("pointer");
+                                EditorUI.addDragGhost("pointer");
                             }
                             else {
                                 self.clearSelect();
@@ -212,7 +212,7 @@
                 if ( self.draggingCanvas ) {
                     self.draggingCanvas = false;
                     _applyCursor(event);
-                    FIRE.removeDragGhost();
+                    EditorUI.removeDragGhost();
                 }
                 if ( self.rectSelecting ) {
                     self.confirmRectSelect(self.atlasLayer);
@@ -224,7 +224,7 @@
                 else if ( self.draggingItems ) {
                     self.draggingItems = false;
                     _applyCursor(event);
-                    FIRE.removeDragGhost();
+                    EditorUI.removeDragGhost();
                 }
                 else {
                     _applyCursor(event);

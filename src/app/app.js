@@ -15,8 +15,7 @@ AtlasCanvasSettings = (function () {
         this.showCheckerboard = true;
         this.smoothCanvas = true;
     }
-    FIRE.extend(AtlasCanvasSettings, _super);
-    AtlasCanvasSettings.prototype.__classname__ = "FIRE.AtlasCanvasSettings";
+    FIRE.extend("FIRE.AtlasCanvasSettings", AtlasCanvasSettings, _super);
 
     return AtlasCanvasSettings;
 })();

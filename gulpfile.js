@@ -107,9 +107,9 @@ var writeVersion = function (filename) {
         var date = new Date();
         var yy = date.getFullYear().toString().substring(2);
         var m = (date.getMonth()+1).toString();
-        var mm = m.length == 2 ? m : '0' + m;
+        var mm = m.length === 2 ? m : '0' + m;
         var d = date.getDate().toString();
-        var dd = d.length == 2 ? d : '0' + d;
+        var dd = d.length === 2 ? d : '0' + d;
         var build = yy + mm + dd;
 
         var data = { file: file, gulp_version: pkg.version, gulp_build: build };
@@ -170,7 +170,7 @@ gulp.task('build-html-dev', ['cp-html', 'css', 'js-dev'], build_html(false));
 gulp.task('cp-all', ['cp-core', 'cp-editor-ui', 'cp-img', 'cp-html', 'cp-3rd'] );
 gulp.task('dev', ['cp-all', 'build-html-dev' ] );
 gulp.task('default', ['cp-all', 'ext-min', 'build-html' ] );
-gulp.task('all', ['dev' ] );
+gulp.task('all', ['dev', 'ext-min' ] );
 
 // watch
 gulp.task('watch', function() {

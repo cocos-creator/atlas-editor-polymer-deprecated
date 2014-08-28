@@ -89,11 +89,11 @@ define(["ext/pngcrush.min.fixed"], function () {
             set_write_fn(png_ptr, NULL, Runtime.addFunction(write_data_fn), NULL);
         };
         libpng.set_IHDR = function (png_ptr, info_ptr, width, height, bitDepth, colorType, interlace, compression, filter) {
-            bitDepth = typeof bitDepth !== 'undefined' ? bitDepth : 8;
-            colorType = typeof colorType !== 'undefined' ? colorType : PNG_COLOR_TYPE_RGB_ALPHA;
-            interlace = typeof interlace !== 'undefined' ? interlace : PNG_INTERLACE_NONE;
-            compression = typeof compression !== 'undefined' ? compression : PNG_COMPRESSION_TYPE_BASE;
-            filter = typeof filter !== 'undefined' ? filter : PNG_FILTER_TYPE_BASE;
+            bitDepth = bitDepth !== undefined ? bitDepth : 8;
+            colorType = colorType !== undefined ? colorType : PNG_COLOR_TYPE_RGB_ALPHA;
+            interlace = interlace !== undefined ? interlace : PNG_INTERLACE_NONE;
+            compression = compression !== undefined ? compression : PNG_COMPRESSION_TYPE_BASE;
+            filter = filter !== undefined ? filter : PNG_FILTER_TYPE_BASE;
             set_IHDR(png_ptr, info_ptr, width, height, bitDepth, colorType, interlace, compression, filter);
         };
         libpng.destroy_read_struct = function (png_ptr, info_ptr, end_info_ptr) {
@@ -144,7 +144,7 @@ define(["ext/pngcrush.min.fixed"], function () {
     };
     
     png.prototype.write_imageData = function (imageData) {
-        if (typeof(imageData) === 'undefined') {
+        if (imageData === undefined) {
             console.error('data not specified');
             return;
         }

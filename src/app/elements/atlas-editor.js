@@ -80,7 +80,7 @@
                         // save data
                         FIRE.saveText(text, dataName, dataPath);
                         buildPngPromise.then(function (data) {
-                            var imgPath = dataPath && FIRE.Path.setExtension(dataPath, '.png');
+                            var imgPath = dataPath && FIRE.Path.setExtname(dataPath, '.png');
                             FIRE.savePng(data, self.atlas.textureFileName, imgPath, null);
                             resolve();
                         });
@@ -130,7 +130,7 @@
 
                             var Path = require('path');
                             var dataName = Path.basename(dataPath);
-                            self.atlas.textureFileName = FIRE.Path.setExtension(dataName, '.png');
+                            self.atlas.textureFileName = FIRE.Path.setExtname(dataName, '.png');
                             Promise.all([
                                 Promise.delay(minLoadingTime),
                                 exportFiles(exporter, dataName, dataPath, buildPngPromise)
@@ -151,12 +151,12 @@
                 var requireZip = requireAsync('jszip');
                 var exportPromise = requireAsync(selectedExporter)
                                     .then(function (exporter) {
-                                        self.atlas.textureFileName = FIRE.Path.setExtension(exporter.fileName, '.png');
+                                        self.atlas.textureFileName = FIRE.Path.setExtname(exporter.fileName, '.png');
                                         return exportZip(exporter, exporter.fileName, buildPngPromise, requireZip);
                                     });
                 Promise.all([exportPromise, requireSaver, Promise.delay(minLoadingTime)])
                 .spread(function(blob) {
-                    var zipname = FIRE.Path.setExtension(self.atlas.textureFileName, '.zip');
+                    var zipname = FIRE.Path.setExtname(self.atlas.textureFileName, '.zip');
                     saveAs(blob, zipname);
                     // finished
                     loadingMask.hide();
